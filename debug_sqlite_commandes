@@ -1,5 +1,0 @@
-pm list packages | grep ionic
-run-as com.ionicframework.openscore240257
-cd databases
-sqlite3 __ionicstorage
-.open __ionicstorage
