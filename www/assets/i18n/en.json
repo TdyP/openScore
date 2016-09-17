@@ -1,0 +1,58 @@
+{
+    "title" : "OpenScore",
+    "cancel" : "Cancel",
+    "ok" : "OK",
+    "next" : "Next",
+    "validate" : "Validate",
+    "delete" : "Delete",
+    "home": {
+        "new_game": "New game",
+        "last_games": "Last games",
+        "players_count": "{{ count }} players",
+        "rounds_played" : "{{ rounds }} played rounds",
+        "remove_confirm_title": "Do you really want to delete this game?",
+        "players": "Players",
+        "no_games_played": "No game played. Tap \"+\" to start a game!"
+    },
+    "settings": {
+        "settings": "Settings",
+        "game_name": "Game",
+        "winner": "Winner",
+        "biggest_score": "Biggest score",
+        "smallest_score": "Smallest score",
+        "game_end": "Game end?",
+        "end_never": "Never",
+        "end_rounds": "Rounds",
+        "end_score": "Score",
+        "rounds": "Rounds",
+        "points": "Points",
+        "score_input": "Scores input",
+        "score_input_player": "By player",
+        "score_input_round": "By round"
+    },
+    "players": {
+        "players": "Players",
+        "add": "Add player",
+        "name": "Name",
+        "number": "Number of players",
+        "default_name" : "Player {{index}}",
+        "new_player" : "New player",
+        "remove_confirm_title" : "Do you really want to delete this player?",
+        "remove_confirm_msg" : "His score will be definitively deleted"
+    },
+    "live": {
+        "substract" : "Substract",
+        "add" : "Add",
+        "score" : "Score",
+        "history" : "History",
+        "chart" : "Chart",
+        "settings": "Settings",
+        "players": "Players",
+        "started_at" : "Game started",
+        "rounds_played" : "{{ rounds }} played rounds",
+        "new_round": "New round"
+    },
+    "player_view": {
+        "games_played": "{{ count }} games played"
+    }
+}

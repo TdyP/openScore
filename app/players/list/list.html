@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ "home.players" | translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list class="players_list">
+    <ion-item *ngFor="let player of players" (click)="viewPlayer(player)" (press)="showActions(player)">
+      <span class="player_color" [style.background-color]="player.color" item-left></span>
+      {{ player.name }}
+    </ion-item>
+  </ion-list>
+</ion-content>

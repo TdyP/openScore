@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ player.name }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  {{ 'player_view.games_played' | translate : {count: player.stats.games_played} }}
+</ion-content>

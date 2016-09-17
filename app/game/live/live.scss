@@ -1,0 +1,114 @@
+@import "./chart/chart";
+@import "./newRound/newRound";
+
+$colorWidth: 7px;
+
+.game_details {
+  .name {
+    font-size: 1.2em;
+  }
+
+  .rounds {
+
+  }
+
+  .start_date {
+    font-size: 0.9em;
+    color: darken( map-get($colors,'mainLight'), 10% );
+  }
+}
+.players {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  .player_wrapper {
+    $margin: 5px;
+    background: darken( map-get($colors,'lightBG'), 2% );
+    margin: $margin;
+    padding-left: $colorWidth;
+    box-shadow: 1px 1px 1px #CCCCCC;
+    position: relative;
+    width: 100vw;
+    min-width: 200px;
+
+    @media (orientation: landscape) and (min-width: 500px) {
+      width: calc(33vw - #{$margin * 2});
+    }
+
+    .color {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: $colorWidth;
+    }
+
+    .flex_wrapper {
+      display: flex;
+      flex-direction: row;
+      padding: 5px;
+
+      .minus, .plus {
+        flex: 1 0 30%;
+        text-align: center;
+        position: relative;
+        justify-content: center;
+        align-self: center;
+
+        button {
+          border-radius: 50%;
+          width: 3.5em;
+          height: 3.5em;
+
+          @media (orientation: landscape) and (max-width: 767px) {
+            width: 2.5em;
+            height: 2.5em;
+          }
+
+        }
+      }
+
+      .name_score_wrapper {
+        flex: 1 0 40%;
+        justify-content: center;
+        align-items: flex-start;
+
+        .name {
+          text-align: center;
+          margin: 3px;
+        }
+
+        .score {
+          font-size: 2em;
+          text-align: center;
+        }
+      }
+
+      .tmpScore {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-width: 10px;
+        padding: 5px;
+        background: #090;
+        color: #FFFFFF;
+        border-bottom-left-radius: 2px;
+
+        &.neg {
+          background: #900;
+        }
+      }
+    }
+
+    .medal {
+      text-shadow: 0px 0px 0px #000000;
+      margin: 0;
+    }
+
+    &.rank_1 .medal { color: #FFD700 } // Gold medal
+    &.rank_2 .medal { color: #C0C0C0 } // Silver medal
+    &.rank_3 .medal { color: #cd7f32 } // Bronze medal
+  }
+}

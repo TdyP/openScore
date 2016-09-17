@@ -1,0 +1,70 @@
+// http://ionicframework.com/docs/v2/theming/
+
+
+// App Shared Imports
+// --------------------------------------------------
+// These are the imports which make up the design of this app.
+// By default each design mode includes these shared imports.
+// App Shared Sass variables belong in app.variables.scss.
+
+@import "../home/home";
+@import "../players/list/list";
+@import "../players/view/view";
+@import "../game/live/live";
+@import "../game/players/players";
+@import "../game/settings/settings";
+
+
+/** Overwrite default modal display to show page with a backdrop, like an alert */
+ion-modal {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-backdrop {
+    visibility: visible;
+  }
+
+  .modal-wrapper {
+    border-radius: 2px;
+    background-color: #fafafa;
+    box-shadow: 0 16px 20px rgba(0, 0, 0, 0.4);
+    min-width: 280px;
+    max-height: 80%;
+    width: auto;
+  }
+}
+
+ion-header {
+  background: map-get($colors,'mainDark');
+  color: map-get($colors,'mainLight');
+  [padding] {
+    padding: 5px;
+  }
+}
+
+ion-footer {
+  background: map-get($colors,'mainDark');
+  color: map-get($colors,'mainLight');
+}
+
+ion-content {
+  background: map-get($colors,'lightBG');
+}
+
+.item {
+  background: map-get($colors,'lightBG');
+}
+
+.toolbar-title {
+  color: inherit;
+}
+.toolbar-background {
+  border-color: transparent;
+  background: map-get($colors,'mainDark');
+}
+
+.bar-button-default {
+  color: map-get($colors,'mainLight');
+}

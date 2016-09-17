@@ -1,0 +1,26 @@
+.game-players {
+  .players_list {
+    .item {
+      padding-left: 0;
+    }
+
+    .player_color {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      border: 1px solid #AAAAAA;
+    }
+
+    .player_select {
+      padding: 10px 25px;
+
+      .select-text {
+        display: none;
+      }
+
+      .select-icon .select-icon-inner {
+        left: 1px;
+      }
+    }
+  }
+}

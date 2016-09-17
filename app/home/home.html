@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title text-left>
+      OpenScore
+    </ion-title>
+    <ion-buttons end>
+      <button (click)="showMenu($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list [hidden]="!games || !games.length">
+    <h6>{{ 'home.last_games' | translate }}</h6>
+    <ion-item *ngFor="let game of games | sortGames"
+     [ngClass]="{favorite: game.favorite}">
+      <div (click)="openGame(game)" (press)="showActions(game)">
+        <span class="name">{{ game.name }}</span>
+        <p>{{ 'home.players_count' | translate:{count: game.players_count} }}</p>
+        <p>{{ 'home.rounds_played' | translate:{rounds: game.rounds_played} }}</p>
+        <p>{{ game.modifAt | date : 'short' }}</p>
+      </div>
+      <ion-icon class="favorite-icon" name="{{ game.favorite ? 'star': 'star-outline'}}" item-right (click)="toggleFavorite(game)"></ion-icon>
+    </ion-item>
+  </ion-list>
+  <div class="no_games" [hidden]="games && games.length">
+    {{ 'home.no_games_played' | translate }}
+  </div>
+  <button fab fab-bottom fab-right (click)="newGame()" block>
+    <ion-icon name="add"></ion-icon>
+  </button>
+</ion-content>
