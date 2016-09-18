@@ -25,8 +25,6 @@
   - Player name index
   - Score lost when selected another player
 - LIVE
-  - History
-    - Group by round
-    - Tap long to edit score
+  - Add 0
   - Tap long on score: player history
   - (End game)

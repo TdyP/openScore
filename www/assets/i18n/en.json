@@ -1,6 +1,7 @@
 {
     "title" : "OpenScore",
     "cancel" : "Cancel",
+    "edit" : "Edit",
     "ok" : "OK",
     "next" : "Next",
     "validate" : "Validate",
@@ -54,5 +55,9 @@
     },
     "player_view": {
         "games_played": "{{ count }} games played"
+    },
+    "history": {
+        "remove_confirm_title": "Do you really want to delete this score?",
+        "edit_score": "Edit score"
     }
 }

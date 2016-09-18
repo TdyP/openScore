@@ -5,12 +5,34 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="history">
-  <ion-list>
+<ion-content padding>
+  <ion-scroll scrollX="true">
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th *ngFor="let playerId of playerIds">
+            {{ sortedRounds[playerId].player.name }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let roundNumber of roundsNumber">
+          <td>{{ roundNumber }}</td>
+          <td *ngFor="let playerId of playerIds" (press)="showActions(sortedRounds[playerId].rounds[roundNumber - 1])">
+            {{ sortedRounds[playerId].rounds[roundNumber - 1] ? sortedRounds[playerId].rounds[roundNumber - 1].score : '' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ion-scroll>
+
+
+<!--   <ion-list>
     <ion-item *ngFor="let round of game.rounds">
       {{ round.player.name }}
       <span class="score" item-right>{{ round.score }}</span>
       <ion-icon (click)="removeRound(round)" name="remove-circle" item-right></ion-icon>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 </ion-content>

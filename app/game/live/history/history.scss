@@ -1,0 +1,25 @@
+.game-history {
+
+  ion-scroll {
+    height: 100%;
+    width: 100%;
+
+    table {
+      $bgColor: #FFFFFF;
+      width: 100%;
+
+      td, th {
+        padding: 0.5em;
+        text-align: center;
+        background: $bgColor;
+        border: 1px solid darken($bgColor, 10%);
+      }
+
+      th:first-child {
+        background: none;
+        border: none;
+      }
+    }
+  }
+
+}

@@ -292,6 +292,10 @@ export class GameService {
     })
   }
 
+  public updateRound(round: any) {
+    return this.db.query('UPDATE rounds SET score = ? WHERE id = ?', [round.score, round.id]);
+  }
+
   public removeRound(game: GameModel, round: any) {
     // Update player score
     let player = game.players[game.players.indexOf(round.player)];

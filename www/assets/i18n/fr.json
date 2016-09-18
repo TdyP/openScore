@@ -1,6 +1,7 @@
 {
     "title" : "OpenScore",
     "cancel" : "Annuler",
+    "edit" : "Modifier",
     "ok" : "OK",
     "next" : "Suivant",
     "validate" : "Valider",
@@ -54,5 +55,9 @@
     },
     "player_view": {
         "games_played": "{{ count }} parties jouées"
+    },
+    "history": {
+        "remove_confirm_title": "Êtes-vous sûr de vouloir supprimer ce score?",
+        "edit_score": "Modifier le score"
     }
 }

@@ -5,7 +5,9 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { GameModel } from '../game.model';
 import { GameService } from '../game.service';
 import { PlayerModel } from '../players/players.model';
+
 import { LiveMenu } from './menu/menu';
+import { GameHistory } from './history/history';
 import { AddScoreModal } from './addScore/addScore';
 import { NewRoundModal } from './newRound/newRound';
 import { SortByScorePipe } from './sortByScore.pipe';
@@ -106,5 +108,9 @@ export class GameLive {
       }
     )
     .present();
+  }
+
+  public openPlayerHistory(player: PlayerModel) {
+    this.navCtrl.push(GameHistory, {game: this.game, player});
   }
 }
