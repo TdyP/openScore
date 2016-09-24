@@ -68,3 +68,7 @@ ion-content {
 .bar-button-default {
   color: map-get($colors,'mainLight');
 }
+
+.action-sheet-group:last-child .action-sheet-button {
+  border-top: 1px solid $list-border-color;
+}

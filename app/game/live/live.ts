@@ -42,11 +42,7 @@ export class GameLive {
     clearTimeout(this.pendingScore[player.id]); // Reset timeout on each tap
 
     this.pendingScore[player.id] = setTimeout((() => {
-      this.gameService.updateScore(this.game, player, player.tmpScore);
-
-      delete this.pendingScore[player.id];
-      player.tmpScore = 0;
-
+      this.updateScore(player, player.tmpScore);
     }).bind(this), this.tmpScoreDelay);
 
     player.tmpScore += Number(score);
@@ -58,8 +54,16 @@ export class GameLive {
     }
   }
 
+  private updateScore(player: PlayerModel, score: number) {
+    this.gameService.updateScore(this.game, player, score);
+
+    delete this.pendingScore[player.id];
+  }
+
   public openScoreModal(player, minus : boolean = false) {
     let title = minus ? 'live.substract' : 'live.add';
+    let tmpScore = player.tmpScore;
+    player.tmpScore = 0;
 
     let alert = this.alertCtrl.create({
       title: this.translateService.instant(title),
@@ -67,7 +71,8 @@ export class GameLive {
         {
           name: 'score',
           placeholder: this.translateService.instant('live.score'),
-          type: 'number'
+          type: 'number',
+          value: tmpScore || ''
         },
       ],
       buttons: [
@@ -83,7 +88,7 @@ export class GameLive {
               if (minus) {
                 score = -score;
               }
-              this.updateTmpScore(player, score);
+              this.updateScore(player, score);
             }
           }
         }

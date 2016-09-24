@@ -235,6 +235,7 @@ export class GameService {
     player.score += score;
     this.updateRanking(game);
     this.addRound(game, { player_id: player.id, score });
+    player.tmpScore = 0;
   }
 
   public updateRanking(game: GameModel) {

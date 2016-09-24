@@ -81,6 +81,8 @@ export class GamePlayers {
 
   public playerSelected(index) {
     let selection = this.selectedPlayers[index];
+    let currentScore = this.game.players[index].score;
+    console.log('currentScore', currentScore);
     if (selection.id) {
       this.game.players[index] = new PlayerModel(selection);
     }
@@ -88,6 +90,8 @@ export class GamePlayers {
       delete this.game.players[index].id;
       this.game.players[index].name = this.getDefaultName(index + 1);
     }
+    this.game.players[index].score = currentScore;
+    console.log('playerscore', this.game.players[index].score);
   }
 
   public setPlayerSelectable(player) {
@@ -99,7 +103,6 @@ export class GamePlayers {
     let doRemove = function() {
       self.gameService.removePlayer(self.game, player);
     }
-
 
     if(this.game.id && player.id) {
       this.alertCtrl.create({

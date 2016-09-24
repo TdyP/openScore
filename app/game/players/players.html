@@ -16,14 +16,11 @@
   <button (click)="defineNumber()" full block>
     {{ "players.number" | translate }} : {{ game.players.length || 0 }}
   </button>
-
-  <!-- <input [(colorPicker)]="color" [style.background]="color" [value]="color"/> -->
-
   <ion-list class="players_list">
     <ion-item *ngFor="let player of game.players; let i = index">
       <span class="player_color" [style.background-color]="player.color" item-left></span>
       <ion-input required type="text" placeholder="{{ 'players.name' | translate }}" [(ngModel)]="player.name" [disabled]="!game.id && player.id" (input)="setPlayerSelectable(player)"></ion-input>
-      <ion-select class="player_select" [(ngModel)]="selectedPlayers[i]" (ionChange)="playerSelected(i)">
+      <ion-select interface="action-sheet" class="player_select" [(ngModel)]="selectedPlayers[i]" (ionChange)="playerSelected(i)" cancelText="{{ 'cancel' | translate }}">
         <ion-option [value]="{}">{{ 'players.new_player' | translate }}</ion-option>
         <ion-option *ngFor="let p of ( allPlayers | availablePlayers : game.getPlayersIds() )" [value]="p">{{ p.name }}</ion-option>
       </ion-select>
