@@ -33,7 +33,7 @@ export class GamePlayers {
     this.selectedPlayers = [];
   }
 
-    public color: string = "#127bdc";
+  public color: string;
 
   ionViewWillEnter() {
     if (!this.game.players.length) {
@@ -81,17 +81,16 @@ export class GamePlayers {
 
   public playerSelected(index) {
     let selection = this.selectedPlayers[index];
-    let currentScore = this.game.players[index].score;
-    console.log('currentScore', currentScore);
+
     if (selection.id) {
-      this.game.players[index] = new PlayerModel(selection);
+      let prevId = this.game.players[index].id;
+      this.game.players[index].id = selection.id;
+      this.game.players[index].name = selection.name;
     }
     else {
       delete this.game.players[index].id;
       this.game.players[index].name = this.getDefaultName(index + 1);
     }
-    this.game.players[index].score = currentScore;
-    console.log('playerscore', this.game.players[index].score);
   }
 
   public setPlayerSelectable(player) {
@@ -149,7 +148,7 @@ export class GamePlayers {
       let numberToGenerate = playersNumber - existingPlayersCount;
       for(let i = 0; i < numberToGenerate; i++) {
         let name = this.getDefaultName(existingPlayersCount + (i + 1));
-        this.game.addPlayer({name});
+        this.game.addPlayer({name}, playersNumber);
       }
     }
     else {

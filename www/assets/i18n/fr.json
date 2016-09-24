@@ -39,7 +39,8 @@
         "default_name" : "Joueur {{index}}",
         "new_player" : "Nouveau joueur",
         "remove_confirm_title" : "Êtes-vous sûr de vouloir supprimer ce joueur?",
-        "remove_confirm_msg" : "Son score sera définitivement supprimé"
+        "remove_confirm_msg" : "Son score sera définitivement supprimé",
+        "lets_go" : "C'est parti !"
     },
     "live": {
         "substract" : "Soustraire",

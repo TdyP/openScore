@@ -47,8 +47,15 @@ export class GameModel {
     this.modifAt = new Date(this.modif_date);
   }
 
-  public addPlayer(data ?: any) {
-    this.players.push(new PlayerModel(data));
+  /**
+   * Add a new player to the game
+   *
+   * @param {any}    data          Player data
+   * @param {number} playersNumber Total number of players in the game. Used for random color generation
+   */
+  public addPlayer(data ?: any, playersNumber ?: number) {
+    data.rank = this.players.length + 1;
+    this.players.push(new PlayerModel(data, this.players.length));
   }
 
   /**
