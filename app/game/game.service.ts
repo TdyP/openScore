@@ -197,7 +197,6 @@ export class GameService {
 
   public saveGame(game: GameModel) {
     return new Promise((resolve, reject) => {
-      console.log('SAVE GAME', game);
       let query;
       let params = [
         game.name,
@@ -297,9 +296,8 @@ export class GameService {
     return this.db.query('UPDATE rounds SET score = ? WHERE id = ?', [round.score, round.id]);
   }
 
-  public removeRound(game: GameModel, round: any) {
+  public removeRound(game: GameModel, round: any, player: PlayerModel) {
     // Update player score
-    let player = game.players[game.players.indexOf(round.player)];
     player.score -= round.score;
 
     // Remove round

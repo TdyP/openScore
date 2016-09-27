@@ -68,7 +68,7 @@ export class GameHistory {
    * Display actions sheet when pressing a score
    * @param {any} round
    */
-  public showActions(round: any) {
+  public showActions(round: any, player: PlayerModel) {
     let actionSheet = this.actionSheetCtrl.create({
       buttons: [
         {
@@ -77,7 +77,7 @@ export class GameHistory {
           handler: () => {
             actionSheet.dismiss()
             .then(() => {
-              this.editRound(round);
+              this.editRound(round, player);
             });
 
             return false;
@@ -90,7 +90,7 @@ export class GameHistory {
           handler: () => {
             actionSheet.dismiss()
             .then(() => {
-              this.deleteRound(round);
+              this.deleteRound(round, player);
             });
 
             return false;
@@ -110,7 +110,7 @@ export class GameHistory {
    * Display a confirm alert before deleting the round
    * @param {any} round
    */
-  public deleteRound(round: any) {
+  public deleteRound(round: any, player: PlayerModel) {
     this.alertCtrl.create({
       title: this.translateService.instant('history.remove_confirm_title'),
       message: '',
@@ -121,7 +121,7 @@ export class GameHistory {
         {
           text: 'OK',
           handler: () => {
-            this.gameService.removeRound(this.game, round)
+            this.gameService.removeRound(this.game, round, player)
             .then(() => this.sortRounds()) // Refresh history table data
             .catch(console.error);
           }
@@ -135,7 +135,7 @@ export class GameHistory {
    * Display a confirm alert before deleting the round
    * @param {any} round
    */
-  public editRound(round: any) {
+  public editRound(round: any, player: PlayerModel) {
     this.alertCtrl.create({
       title: this.translateService.instant('history.edit_score'),
       message: '',
@@ -155,7 +155,7 @@ export class GameHistory {
           handler: (data) => {
             let oldScore = round.score;
             round.score = Number(data.score);
-            round.player.score += (-oldScore + round.score);
+            player.score += (-oldScore + round.score);
             this.gameService.updateRound(round);
           }
         }

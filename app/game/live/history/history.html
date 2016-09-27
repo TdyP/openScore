@@ -19,7 +19,7 @@
       <tbody>
         <tr *ngFor="let roundNumber of roundsNumber">
           <td>{{ roundNumber }}</td>
-          <td *ngFor="let playerId of playerIds" (press)="showActions(sortedRounds[playerId].rounds[roundNumber - 1])">
+          <td *ngFor="let playerId of playerIds" (press)="showActions(sortedRounds[playerId].rounds[roundNumber - 1], sortedRounds[playerId].player)">
             {{ sortedRounds[playerId].rounds[roundNumber - 1] ? sortedRounds[playerId].rounds[roundNumber - 1].score : '' }}
           </td>
         </tr>
