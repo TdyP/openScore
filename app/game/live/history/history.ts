@@ -13,7 +13,6 @@ export class GameHistory {
 
   game: GameModel;
   player: any;
-  rounds: Array<any>;
   sortedRounds: any;
   playerIds: Array<any>;
   roundsNumber: Array<number>;
@@ -28,7 +27,6 @@ export class GameHistory {
   ) {
     this.game = this.navParams.get('game');
     this.player = this.navParams.get('player');
-    this.rounds = [];
 
     // Init history table data
     this.sortRounds();
@@ -39,28 +37,26 @@ export class GameHistory {
    */
   private sortRounds() {
     this.sortedRounds = {};
+
     // Add player object to each round
-    this.rounds = this.game.rounds.filter(round => {
-      return this.player === undefined || round.player_id === this.player.id;
-    })
-    .map(round => {
-      round.player = this.game.getPlayerById(round.player_id);
-      return round;
-    });
+    this.playerIds = !!this.player ? [this.player.id] : this.game.players.map(player => player.id);
 
-    for(let round of this.rounds) {
-      if(this.sortedRounds[round.player_id] === undefined) {
-        this.sortedRounds[round.player_id] = {
-          player: this.game.getPlayerById(round.player_id),
-          rounds: []
-        }
-      }
-
-      this.sortedRounds[round.player_id].rounds.push(round);
+    // Init rounds array for each player
+    for(let playerId of this.playerIds) {
+      this.sortedRounds[playerId] = {
+        player: this.game.getPlayerById(playerId),
+        rounds: []
+      };
     }
 
-    this.playerIds = Object.keys(this.sortedRounds);
+    // Retrieve players scores
+    for(let round of this.game.rounds) {
+      if(!!this.sortedRounds[round.player_id] && !!this.sortedRounds[round.player_id].player) {
+        this.sortedRounds[round.player_id].rounds.push(round);
+      }
+    }
 
+    // Compute number of rows to display
     this.roundsNumber = [];
     let roundsCount = this.playerIds.length > 1 ? this.game.rounds_played : this.sortedRounds[this.playerIds[0]].rounds.length;
     for(let i = 0; i < roundsCount; i++) {
