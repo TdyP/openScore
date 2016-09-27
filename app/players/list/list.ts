@@ -32,13 +32,31 @@ export class PlayersList {
   }
 
 
-  public viewPlayer(player) {
+  /**
+   * Open player details page
+   * Not used at the moment, need more interesting informations to display, like stats
+   *
+   * @param {PlayerModel} player
+   */
+  public viewPlayer(player: PlayerModel) {
     this.navCtrl.push(PlayersView, {player});
   }
 
   public showActions(player: PlayerModel) {
     let actionSheet = this.actionSheetCtrl.create({
       buttons: [
+        {
+          text: this.translateService.instant('edit') + ' ' + player.name,
+          icon: 'create',
+          handler: () => {
+            actionSheet.dismiss()
+            .then(() => {
+              this.editPlayer(player);
+            });
+
+            return false;
+          }
+        },
         {
           text: this.translateService.instant('delete') + ' ' + player.name,
           role: 'destructive',
@@ -60,6 +78,33 @@ export class PlayersList {
       ]
     });
     actionSheet.present();
+  }
+
+  public editPlayer(player: PlayerModel) {
+    this.alertCtrl.create({
+      title: this.translateService.instant('edit') + ' ' + player.name,
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: player.name
+        },
+      ],
+      buttons: [
+        {
+          text: this.translateService.instant('cancel')
+        },
+        {
+          text: 'OK',
+          handler: (data) => {
+            //TODO: validate name is not empty
+            player.name = data.name;
+            this.playerService.save(player);
+          }
+        }
+      ]
+    })
+    .present();
   }
 
   public deletePlayer(player: PlayerModel) {

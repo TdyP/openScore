@@ -7,7 +7,7 @@
 </ion-header>
 <ion-content>
   <ion-list class="players_list">
-    <ion-item *ngFor="let player of players" (click)="viewPlayer(player)" (press)="showActions(player)">
+    <ion-item *ngFor="let player of players" (click)="showActions(player)">
       <span class="player_color" [style.background-color]="player.color" item-left></span>
       {{ player.name }}
     </ion-item>
