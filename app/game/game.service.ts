@@ -34,6 +34,10 @@ export class GameService {
             g.id,
             g.start_date,
             g.modif_date,
+            g.goal,
+            g.goal_type,
+            g.score_input,
+            g.score_type,
             g.rounds_played,
             g.favorite,
             COUNT(p.player_id) AS players_count
@@ -197,6 +201,7 @@ export class GameService {
 
   public saveGame(game: GameModel) {
     return new Promise((resolve, reject) => {
+      console.log('game to save', game);
       let query;
       let params = [
         game.name,
