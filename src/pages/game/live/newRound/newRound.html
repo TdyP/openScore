@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ 'live.new_round' | translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padded class="new-round-modal">
+  <ion-list>
+    <ion-item *ngFor="let player of game.players">
+      <ion-label>{{ player.name }}</ion-label>
+      <ion-input type="text" placeholder="0" type="number" class="score" [(ngModel)]="scores[player.id].points"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-buttons end>
+    <button ion-button clear light (click)="dismiss()">
+      {{ "cancel" | translate }}
+    </button>
+    <button ion-button clear light (click)="validate()">
+      {{ "validate" | translate }}
+    </button>
+  </ion-buttons>
+</ion-footer>

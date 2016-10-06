@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ "settings.settings" | translate }}
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button light (click)="validate()">
+        <span [hidden]="game.id">
+          {{ "next" | translate }}
+          <ion-icon name="arrow-forward"></ion-icon>
+        </span>
+        <span [hidden]="!game.id">
+          {{ "validate" | translate }}
+          <ion-icon name="checkmark"></ion-icon>
+        </span>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="game-settings">
+  <ion-list>
+    <ion-item>
+      <ion-input type="text" placeholder="{{ 'settings.game_name' | translate }}" [(ngModel)]="game.name"></ion-input>
+      <ion-select interface="action-sheet" class="game_select" [(ngModel)]="selectedGame" (ionChange)="gameSelected()" [hidden]="!previousGames.length" cancelText="{{ 'cancel' | translate }}">
+        <ion-option *ngFor="let g of previousGames" [value]="g">{{ g.name }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ "settings.winner" | translate }}</ion-label>
+      <ion-select interface="action-sheet" [(ngModel)]="game.score_type" cancelText="{{ 'cancel' | translate }}">
+        <ion-option value="asc">{{ "settings.biggest_score" | translate }}</ion-option>
+        <ion-option value="desc">{{ "settings.smallest_score" | translate }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{ "settings.score_input" | translate }}</ion-label>
+      <ion-select interface="action-sheet" [(ngModel)]="game.score_input" cancelText="{{ 'cancel' | translate }}">
+        <ion-option value="player">{{ "settings.score_input_player" | translate }}</ion-option>
+        <ion-option value="round">{{ "settings.score_input_round" | translate }}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,24 @@
+.home-page {
+  ion-navbar {
+    text-align: center;
+  }
+
+  ion-item-options {
+    button {
+      box-shadow: 5px 0 10px -5px #000000 inset;
+    }
+  }
+
+  .no_games {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #AAAAAA;
+  }
+
+  ion-item.favorite {
+    .favorite-icon {
+      color: #FFD700;
+      text-shadow: 0px 0px 0px #000000;
+    }
+  }
+}

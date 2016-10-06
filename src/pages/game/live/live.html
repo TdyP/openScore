@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar>
+    <div class="game_details">
+      <div class="name">{{ game.name }}</div>
+      <div class="rounds">{{ 'live.rounds_played' | translate : { rounds: game.rounds_played } }}</div>
+      <div class="start_date">{{ 'live.started_at' | translate}} {{ game.createdAt | date : 'short' }}</div>
+    </div>
+    <ion-buttons end>
+      <button ion-button (click)="showMenu($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div class="players">
+    <div class="player_wrapper rank_{{ player.rank }}" *ngFor="let player of game.players | sortByScore : game.score_input">
+      <div class="color" [style.background-color]="player.color"></div>
+      <div class="flex_wrapper">
+        <div class="tmpScore" [hidden]="!player.tmpScore" [ngClass]="{neg: player.tmpScore < 0 }">{{ player.tmpScore }}</div>
+        <div class="minus" [hidden]="game.score_input !== 'player'">
+          <button ion-button round (click)="updateTmpScore(player, -1)" (press)="openScoreModal(player, true)">
+            <ion-icon name="remove"></ion-icon>
+          </button>
+        </div>
+        <div class="name_score_wrapper">
+          <div class="name">
+            <ion-icon name="medal" class="medal" item-left [hidden]="!player.rank || player.rank > 3"></ion-icon>
+            {{ player.name }}
+          </div>
+          <div class="score" (press)="openPlayerHistory(player)">
+            {{player.score}}
+          </div>
+        </div>
+        <div class="plus" [hidden]="game.score_input !== 'player'">
+          <button ion-button round (click)="updateTmpScore(player, 1)" (press)="openScoreModal(player)">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer [hidden]="game.score_input !== 'round'">
+  <ion-buttons end>
+    <button ion-button clear light (click)="newRound()">
+      <ion-icon name="add-circle" item-left></ion-icon>&nbsp;
+      {{ 'live.new_round' | translate }}
+    </button>
+  </ion-buttons>
+</ion-footer>
