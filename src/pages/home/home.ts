@@ -23,16 +23,14 @@ export class HomePage {
     public popoverCtrl: PopoverController,
     public gameService: GameService,
     public events: Events
-  ) {
+  ) {}
 
-    // Load games list when DB is ready
-    events.subscribe('db:initialized', (db) => {
-      this.gameService.getAllGames()
-        .then((games) => {
-          this.games = games;
-        })
-        .catch(console.log);
-    });
+  ionViewWillEnter() {
+    this.gameService.getAllGames()
+      .then((games) => {
+        this.games = games;
+      })
+      .catch(console.log);
   }
 
   /**

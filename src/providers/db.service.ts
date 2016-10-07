@@ -6,6 +6,7 @@ import { SQLite } from 'ionic-native';
 export class DbService {
 
   public db: SQLite;
+  private isReady: boolean = false;
 
   constructor(
     db: SQLite,
@@ -22,7 +23,8 @@ export class DbService {
       return this.initDbStructure();
     })
     .then(() => {
-      this.events.publish('db:initialized', this.db);
+      this.isReady = true;
+      this.events.publish('db:ready', this.db);
     })
   }
 
@@ -66,10 +68,33 @@ export class DbService {
       );`
     ];
 
-    return Promise.all(queries.map(query => this.query(query)));
+    return Promise.all(queries.map(query => this.db.executeSql(query, [])));
   }
 
-  public query(query: string, params ?: Array<any>) {
-    return this.db.executeSql(query, params);
+  /**
+   * Run a query
+   * To make sure the app is fully loaded before firing queries,
+   * we check if DB is ready: if not we wait for the event before firing queries
+   *
+   * @param  {string}       query
+   * @param  {Array<any>}   params
+   * @return {Promise<any>} Resolve when query has been actually fired, might wait for the DB to be ready
+   */
+  public query(query: string, params ?: Array<any>): Promise<any> {
+    var self = this;
+    return new Promise((resolve, reject) => {
+      // Run the query
+      let doQuery = function() {
+        self.db.executeSql(query, params)
+          .then(resolve);
+      }
+
+      if(self.isReady) { // Everything's ready, run query
+        doQuery();
+      }
+      else { // DB not ready, wait for it
+        self.events.subscribe('db:ready', doQuery);
+      }
+    });
   }
 }
