@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { Http } from "@angular/http";
 import { IonicApp, IonicModule } from 'ionic-angular';
-import { SQLite } from 'ionic-native';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate/ng2-translate';
 import { OpenScore } from './app.component';
 import { ChartsModule } from "ng2-charts/components/charts/charts";
 
 /** Providers */
 import { DbService } from '../providers/db.service';
+import { LocaleService } from '../providers/locale.service';
 import { GameService } from '../providers/game/game.service';
 import { PlayerService } from '../providers/player/player.service';
 
@@ -77,11 +77,15 @@ export function translateLoaderFactory(http: any) {
     PlayersView
   ],
   providers: [
-    // ColorPickerService,
-    SQLite,
     DbService,
+    LocaleService,
     GameService,
-    PlayerService
+    PlayerService,
+    { // Set user locale for Date pipes
+      provide: LOCALE_ID,
+      deps: [LocaleService],
+      useFactory: (localeService) => localeService.getLocale()
+    }
   ]
 })
 export class AppModule {}
