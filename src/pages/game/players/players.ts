@@ -82,6 +82,7 @@ export class GamePlayers {
     if (selection.id) {
       this.game.players[index].id = selection.id;
       this.game.players[index].name = selection.name;
+      this.game.players[index].selectable = selection.selectable;
     }
     else {
       delete this.game.players[index].id;
