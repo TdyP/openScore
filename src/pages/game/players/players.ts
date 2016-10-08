@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
-// import { ColorPickerDirective } from 'angular2-color-picker';
 
 import { GameModel } from '../../../providers/game/game.model';
 import { GameService } from '../../../providers/game/game.service';
@@ -10,8 +9,8 @@ import { PlayerService } from '../../../providers/player/player.service';
 import { GameLive } from '../live/live';
 
 @Component({
+  selector: 'page-game-players',
   templateUrl: 'players.html'
-  // directives: [ColorPickerDirective]
 })
 export class GamePlayers {
 

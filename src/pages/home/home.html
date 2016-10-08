@@ -11,7 +11,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content class="home-page" padding>
+<ion-content padding>
   <ion-list [hidden]="!games || !games.length">
     <h6>{{ 'home.last_games' | translate }}</h6>
     <ion-item *ngFor="let game of games | sortGames"

@@ -19,7 +19,6 @@ import { GameSettings } from '../pages/game/settings/settings';
 import { GamePlayers } from '../pages/game/players/players';
 import { GameLive } from '../pages/game/live/live';
 import { LiveMenu } from '../pages/game/live/menu/menu';
-import { AddScoreModal } from '../pages/game/live/addScore/addScore';
 import { NewRoundModal } from '../pages/game/live/newRound/newRound';
 import { GameChart } from '../pages/game/live/chart/chart';
 import { GameHistory } from '../pages/game/live/history/history';
@@ -42,7 +41,6 @@ export function translateLoaderFactory(http: any) {
     GamePlayers,
     GameLive,
     LiveMenu,
-    AddScoreModal,
     NewRoundModal,
     GameChart,
     GameHistory,
@@ -70,7 +68,6 @@ export function translateLoaderFactory(http: any) {
     GamePlayers,
     GameLive,
     LiveMenu,
-    AddScoreModal,
     NewRoundModal,
     GameChart,
     GameHistory,

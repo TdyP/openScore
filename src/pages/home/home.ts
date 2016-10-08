@@ -10,6 +10,7 @@ import { GameLive } from '../game/live/live';
 import { HomeMenu } from './menu/menu';
 
 @Component({
+  selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {

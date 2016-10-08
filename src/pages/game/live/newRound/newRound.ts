@@ -5,6 +5,7 @@ import { GameModel } from '../../../../providers/game/game.model';
 import { GameService } from '../../../../providers/game/game.service';
 
 @Component({
+  selector: 'page-new-round',
   templateUrl: 'newRound.html'
 })
 export class NewRoundModal {
@@ -26,8 +27,6 @@ export class NewRoundModal {
         player
       }
     }
-
-    console.log('scores before', this.scores);
   }
 
   public dismiss() {
@@ -39,7 +38,6 @@ export class NewRoundModal {
       let score = this.scores[key];
       this.gameService.updateScore(this.game, score.player, (score.points || 0));
     }
-    console.log('game jupdate', this.game);
     this.viewCtrl.dismiss();
   }
 

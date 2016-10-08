@@ -5,6 +5,7 @@ import { GameModel } from '../../../../providers/game/game.model';
 import { GameService } from '../../../../providers/game/game.service';
 
 @Component({
+  selector: 'page-game-chart',
   templateUrl: 'chart.html'
 })
 export class GameChart {

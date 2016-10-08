@@ -11,6 +11,7 @@ import { GameHistory } from './history/history';
 import { NewRoundModal } from './newRound/newRound';
 
 @Component({
+  selector: 'page-game-live',
   templateUrl: 'live.html'
 })
 export class GameLive {

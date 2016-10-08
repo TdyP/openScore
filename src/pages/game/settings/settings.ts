@@ -6,6 +6,7 @@ import { GameModel } from '../../../providers/game/game.model';
 import { GamePlayers } from '../players/players';
 
 @Component({
+  selector: 'page-game-settings',
   templateUrl: 'settings.html'
 })
 export class GameSettings {

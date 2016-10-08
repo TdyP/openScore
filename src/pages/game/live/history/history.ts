@@ -7,6 +7,7 @@ import { GameService } from '../../../../providers/game/game.service';
 import { PlayerModel } from '../../../../providers/player/player.model';
 
 @Component({
+  selector: 'page-game-history',
   templateUrl: 'history.html'
 })
 export class GameHistory {
