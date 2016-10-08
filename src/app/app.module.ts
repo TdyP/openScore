@@ -1,6 +1,7 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { Http } from "@angular/http";
 import { IonicApp, IonicModule } from 'ionic-angular';
+import { SQLite } from 'ionic-native';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate/ng2-translate';
 import { OpenScore } from './app.component';
 import { ChartsModule } from "ng2-charts/components/charts/charts";
@@ -77,6 +78,7 @@ export function translateLoaderFactory(http: any) {
     PlayersView
   ],
   providers: [
+    SQLite,
     DbService,
     LocaleService,
     GameService,

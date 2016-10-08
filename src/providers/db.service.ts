@@ -7,6 +7,7 @@ export class DbService {
 
   public db: SQLite;
   private isReady: boolean = false;
+  private currentVersion: number = 1;
 
   constructor(
     db: SQLite,
@@ -20,55 +21,12 @@ export class DbService {
       name: 'openscore.db',
       location: 'default' // the location field is required
     }).then(() => {
-      return this.initDbStructure();
+      return this.checkDbVersion();
     })
     .then(() => {
       this.isReady = true;
       this.events.publish('db:ready', this.db);
     })
-  }
-
-  public initDbStructure() {
-
-    let queries = [
-      `CREATE TABLE IF NOT EXISTS games (
-        id            INTEGER PRIMARY KEY AUTOINCREMENT,
-        name          VARCHAR(255),
-        start_date    INT(13),
-        modif_date    INT(13),
-        score_type    VARCHAR(4),
-        score_input   VARCHAR(6),
-        goal          INT,
-        goal_type     VARCHAR(10),
-        rounds_limit  INT,
-        rounds_played INT,
-        favorite      TINYINT(1) DEFAULT 0
-      );`,
-      `CREATE TABLE IF NOT EXISTS players (
-        id     INTEGER PRIMARY KEY AUTOINCREMENT,
-        name   VARCHAR(255) NOT NULL,
-        selectable INT(1) DEFAULT 0,
-        color  INT(6)
-      );`,
-      `CREATE TABLE IF NOT EXISTS participate (
-        game_id     INT NOT NULL,
-        player_id   INT NOT NULL,
-        ranking     INT(3),
-        FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
-        FOREIGN KEY(player_id) REFERENCES players(id) ON DELETE CASCADE
-      );`,
-      `CREATE TABLE IF NOT EXISTS rounds (
-        id          INTEGER PRIMARY KEY AUTOINCREMENT,
-        game_id     INT NOT NULL,
-        player_id   INT NOT NULL,
-        score       INT NOT NULL DEFAULT 0,
-        created_at  INT(13),
-        FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
-        FOREIGN KEY(player_id) REFERENCES players(id) ON DELETE CASCADE
-      );`
-    ];
-
-    return Promise.all(queries.map(query => this.db.executeSql(query, [])));
   }
 
   /**
@@ -96,5 +54,118 @@ export class DbService {
         self.events.subscribe('db:ready', doQuery);
       }
     });
+  }
+
+  /**
+   * Return DB version from DB itself
+   *
+   * @return {Promise<number>} DB version
+   */
+  private getDbVersion(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql(`PRAGMA user_version`, [])
+        .then((res) => {
+          resolve(res.rows.item(0).user_version);
+        })
+    });
+  }
+
+  /**
+   * Check if DB upgrade is necessary
+   *
+   * @return {Promise<any>} Resolve when DB is up-to-date
+   */
+  private checkDbVersion(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getDbVersion()
+        .then(dbVersion => {
+          if(dbVersion < this.currentVersion) { // DB needs to be upgraded
+            return this.upgradeDb(dbVersion);
+          }
+          else { // Everything is up-to-date
+            return Promise.resolve();
+          }
+        })
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+  /**
+   * Call DB upgrade function for given version.
+   * When upgrade is done, we call checkDbVersion() in case of several upgrades are necessary
+   *
+   * @param {number} dbVersion Current DB version
+   */
+  private upgradeDb(dbVersion: number) {
+    return this['upgrade_' + (dbVersion + 1)]()
+      .then(() => this.checkDbVersion());
+  }
+
+  /**
+   * Update DB version in DB itself
+   *
+   * @param {number} newDbVersion
+   */
+  private setDbVersion(newDbVersion: number) {
+    return this.db.executeSql('PRAGMA user_version = ' + newDbVersion, []);
+  }
+
+  /**
+   * UPGRADE FUNCTIONS
+   */
+  /* tslint:disable:no-unused-variable */
+
+
+  /**
+   * First DB structure init
+   *
+   * @return {Promise<any>}
+   */
+  private upgrade_1(): Promise<any> {
+    let queries = [
+      `CREATE TABLE IF NOT EXISTS games (
+        id            INTEGER PRIMARY KEY AUTOINCREMENT,
+        name          VARCHAR(255),
+        start_date    INT(13),
+        modif_date    INT(13),
+        score_type    VARCHAR(4),
+        score_input   VARCHAR(6),
+        goal          INT,
+        goal_type     VARCHAR(10),
+        rounds_limit  INT,
+        rounds_played INT,
+        favorite      TINYINT(1) DEFAULT 0
+      );`,
+      `CREATE INDEX games_dates_idx ON games(modif_date, start_date);`,
+      `CREATE TABLE IF NOT EXISTS players (
+        id     INTEGER PRIMARY KEY AUTOINCREMENT,
+        name   VARCHAR(255) NOT NULL,
+        selectable INT(1) DEFAULT 0,
+        color  INT(6)
+      );`,
+      `CREATE INDEX players_name_idx ON players(name);`,
+      `CREATE TABLE IF NOT EXISTS participate (
+        game_id     INT NOT NULL,
+        player_id   INT NOT NULL,
+        ranking     INT(3),
+        FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
+        FOREIGN KEY(player_id) REFERENCES players(id) ON DELETE CASCADE
+      );`,
+      `CREATE INDEX particip_game_player_idx ON participate(game_id, player_id);`,
+      `CREATE TABLE IF NOT EXISTS rounds (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        game_id     INT NOT NULL,
+        player_id   INT NOT NULL,
+        score       INT NOT NULL DEFAULT 0,
+        created_at  INT(13),
+        FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
+        FOREIGN KEY(player_id) REFERENCES players(id) ON DELETE CASCADE
+      );`,
+      `CREATE INDEX rounds_game_idx ON rounds(game_id);`
+    ];
+
+    return this.db.sqlBatch(queries)
+     .then(() => this.setDbVersion(1));
   }
 }
