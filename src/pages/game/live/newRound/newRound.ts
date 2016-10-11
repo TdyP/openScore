@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { ErrorService } from '../../../../providers/error.service';
 import { GameModel } from '../../../../providers/game/game.model';
 import { GameService } from '../../../../providers/game/game.service';
 
@@ -14,10 +16,12 @@ export class NewRoundModal {
   scores: any;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public viewCtrl: ViewController,
-    public gameService: GameService
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private translateService: TranslateService,
+    private viewCtrl: ViewController,
+    private gameService: GameService,
+    private errorServ: ErrorService
   ) {
     this.game = this.navParams.get('game');
 
@@ -36,7 +40,8 @@ export class NewRoundModal {
   public validate() {
     for(let key of Object.keys(this.scores)) {
       let score = this.scores[key];
-      this.gameService.updateScore(this.game, score.player, (score.points || 0));
+      this.gameService.updateScore(this.game, score.player, (score.points || 0))
+        .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
     this.viewCtrl.dismiss();
   }

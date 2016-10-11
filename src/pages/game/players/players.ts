@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { ErrorService } from '../../../providers/error.service';
 import { GameModel } from '../../../providers/game/game.model';
 import { GameService } from '../../../providers/game/game.service';
 import { PlayerService } from '../../../providers/player/player.service';
@@ -19,18 +20,17 @@ export class GamePlayers {
   selectedPlayers: any;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public alertCtrl: AlertController,
-    public translateService: TranslateService,
-    public PlayerService: PlayerService,
-    public gameService: GameService
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private alertCtrl: AlertController,
+    private translateService: TranslateService,
+    private PlayerService: PlayerService,
+    private gameService: GameService,
+    private errorServ: ErrorService
   ){
     this.game = this.navParams.get('game');
     this.selectedPlayers = [];
   }
-
-  public color: string;
 
   ionViewWillEnter() {
     if (!this.game.players.length) {
@@ -40,7 +40,8 @@ export class GamePlayers {
     this.PlayerService.getAllPlayers()
       .then(players => {
         this.allPlayers = players;
-      });
+      })
+      .catch(err => this.errorServ.handle(err));
   }
 
   public addPlayer() {
@@ -129,12 +130,12 @@ export class GamePlayers {
       .then(() => this.gameService.saveGamePlayers(this.game))
       .then(() => this.navCtrl.push(GameLive, {game: this.game}))
       .then(() => this.navCtrl.remove(1,2)) // Remove settings pages from nav
-      .catch(console.log);
+      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
     else { // Existing game => update players and go back to live view
       this.gameService.saveGamePlayers(this.game)
       .then(() => this.navCtrl.pop())
-      .catch(console.log);
+      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
   }
 

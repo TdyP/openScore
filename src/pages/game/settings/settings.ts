@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { TranslateService } from "ng2-translate/ng2-translate";
 
+import { ErrorService } from '../../../providers/error.service';
 import { GameService } from '../../../providers/game/game.service';
 import { GameModel } from '../../../providers/game/game.model';
 import { GamePlayers } from '../players/players';
@@ -13,14 +15,15 @@ export class GameSettings {
 
   game: GameModel;
   goal_enabled: boolean;
-  gameService: GameService;
   previousGames: any;
   selectedGame: GameModel;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    gameService: GameService
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private errorServ: ErrorService,
+    private translateService: TranslateService,
+    private gameService: GameService
   ) {
     this.gameService = gameService;
 
@@ -31,7 +34,7 @@ export class GameSettings {
         .then(game => {
           this.game = game
         })
-        .catch(console.error);
+        .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.load_game')));
     }
 
     this.goal_enabled = false;
@@ -43,7 +46,7 @@ export class GameSettings {
       .then(games => {
         this.previousGames = games;
       })
-      .catch(console.error);;
+      .catch(err => this.errorServ.handle(err));
   }
 
   validate() {
@@ -53,7 +56,7 @@ export class GameSettings {
     else { // Existing game => go back to live view
       this.gameService.saveGame(this.game)
         .then(() => this.navCtrl.pop())
-        .catch(console.log);
+        .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
   }
 

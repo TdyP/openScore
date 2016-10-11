@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { TranslateService } from "ng2-translate/ng2-translate";
-import { NavController, AlertController, ActionSheetController, PopoverController } from 'ionic-angular';
+import { NavController, AlertController, ActionSheetController, PopoverController, ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
+import { ErrorService } from '../../providers/error.service';
 import { GameService } from '../../providers/game/game.service';
 import { GameModel } from '../../providers/game/game.model';
 import { GameSettings } from '../game/settings/settings';
@@ -22,8 +23,10 @@ export class HomePage {
     public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController,
     public popoverCtrl: PopoverController,
+    public toastCtrl: ToastController,
     public gameService: GameService,
-    public events: Events
+    public events: Events,
+    private errorServ: ErrorService
   ) {}
 
   ionViewWillEnter() {
@@ -31,7 +34,7 @@ export class HomePage {
       .then((games) => {
         this.games = games;
       })
-      .catch(console.log);
+      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.load_all_games')));
   }
 
   /**
@@ -46,7 +49,7 @@ export class HomePage {
       .then(game => {
         this.navCtrl.push(GameLive, {game})
       })
-      .catch(console.error);
+      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.load_game')));
   }
 
   public showActions(game: GameModel) {
@@ -86,7 +89,8 @@ export class HomePage {
         {
           text: 'OK',
           handler: () => {
-            this.gameService.deleteGame(game);
+            this.gameService.deleteGame(game)
+              .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.delete_game')));
             let index = this.games.indexOf(game);
             this.games.splice(index, 1);
           }
@@ -99,7 +103,10 @@ export class HomePage {
   public toggleFavorite(game: GameModel) {
     game.favorite = !game.favorite;
     this.gameService.saveGame(game)
-      .catch(console.error);
+      .catch(err => {
+        game.favorite = !game.favorite;
+        this.errorServ.handle(err, this.translateService.instant('errors.default'))
+      });
   }
 
   public showMenu(ev) {

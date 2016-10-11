@@ -11,6 +11,7 @@ import { DbService } from '../providers/db.service';
 import { LocaleService } from '../providers/locale.service';
 import { GameService } from '../providers/game/game.service';
 import { PlayerService } from '../providers/player/player.service';
+import { ErrorService } from '../providers/error.service';
 
 /** Components */
 import { HomePage } from '../pages/home/home';
@@ -78,6 +79,7 @@ export function translateLoaderFactory(http: any) {
     SQLite,
     DbService,
     LocaleService,
+    ErrorService,
     GameService,
     PlayerService,
     { // Set user locale for Date pipes

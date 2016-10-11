@@ -191,7 +191,6 @@ export class GameService {
 
   public saveGame(game: GameModel) {
     return new Promise((resolve, reject) => {
-      console.log('game to save', game);
       let query;
       let params = [
         game.name,
@@ -224,12 +223,12 @@ export class GameService {
     });
   }
 
-  public updateScore(game: GameModel, player: PlayerModel, score: number) {
+  public updateScore(game: GameModel, player: PlayerModel, score: number): Promise<any> {
     score = Number(score);
     player.score += score;
     this.updateRanking(game);
-    this.addRound(game, { player_id: player.id, score });
     player.tmpScore = 0;
+    return this.addRound(game, { player_id: player.id, score });
   }
 
   public updateRanking(game: GameModel) {

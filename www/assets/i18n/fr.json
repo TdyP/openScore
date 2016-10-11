@@ -60,5 +60,12 @@
     "history": {
         "remove_confirm_title": "Êtes-vous sûr de vouloir supprimer ce score?",
         "edit_score": "Modifier le score"
+    },
+    "errors" : {
+        "default": "Oups... Une erreur est survenue",
+        "db_init": "Oups... Erreur lors du chargement de l'application",
+        "load_all_games": "Oups... Impossible de charger les dernières parties",
+        "load_game": "Oups... Impossible de charger cette partie",
+        "delete_game": "Oups... Impossible de supprimer cette partie"
     }
 }

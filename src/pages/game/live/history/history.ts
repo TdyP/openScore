@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, ActionSheetController } from 'ionic-angular';
 import { TranslateService } from "ng2-translate/ng2-translate";
 
+import { ErrorService } from '../../../../providers/error.service';
 import { GameModel } from '../../../../providers/game/game.model';
 import { GameService } from '../../../../providers/game/game.service';
 import { PlayerModel } from '../../../../providers/player/player.model';
@@ -19,12 +20,13 @@ export class GameHistory {
   roundsNumber: Array<number>;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public translateService: TranslateService,
-    public alertCtrl: AlertController,
-    public actionSheetCtrl: ActionSheetController,
-    public gameService: GameService
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private translateService: TranslateService,
+    private alertCtrl: AlertController,
+    private actionSheetCtrl: ActionSheetController,
+    private gameService: GameService,
+    private errorServ: ErrorService
   ) {
     this.game = this.navParams.get('game');
     this.player = this.navParams.get('player');
@@ -124,7 +126,7 @@ export class GameHistory {
           handler: () => {
             this.gameService.removeRound(this.game, round, player)
             .then(() => this.sortRounds()) // Refresh history table data
-            .catch(console.error);
+            .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
           }
         }
       ]
@@ -157,7 +159,8 @@ export class GameHistory {
             let oldScore = round.score;
             round.score = Number(data.score);
             player.score += (-oldScore + round.score);
-            this.gameService.updateRound(round);
+            this.gameService.updateRound(round)
+              .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
           }
         }
       ]

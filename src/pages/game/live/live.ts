@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, PopoverController, ModalController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { ErrorService } from '../../../providers/error.service';
 import { GameModel } from '../../../providers/game/game.model';
 import { GameService } from '../../../providers/game/game.service';
 import { PlayerModel } from '../../../providers/player/player.model';
@@ -21,13 +22,14 @@ export class GameLive {
   tmpScoreDelay: number = 7000;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public translateService: TranslateService,
-    public popoverCtrl: PopoverController,
-    public modalCtrl: ModalController,
-    public alertCtrl: AlertController,
-    public gameService: GameService
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private translateService: TranslateService,
+    private popoverCtrl: PopoverController,
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    private gameService: GameService,
+    private errorServ: ErrorService
   ) {
     this.game = this.navParams.get('game');
     this.pendingScore = {};
@@ -53,7 +55,8 @@ export class GameLive {
   }
 
   public updateScore(player: PlayerModel, score: number) {
-    this.gameService.updateScore(this.game, player, score);
+    this.gameService.updateScore(this.game, player, score)
+      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
 
     delete this.pendingScore[player.id];
   }
