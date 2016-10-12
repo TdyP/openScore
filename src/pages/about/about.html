@@ -1,10 +1,15 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      {{ "about" | translate }}
+      {{ "about.about" | translate }}
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
-  ABOUT
+<ion-content text-center padding>
+  <div class="version" padding>
+    v{{ appVersion }}
+  </div>
+  <span [innerHTML]="'about.description' | translate:{link:'http://ionicframework.com', github:'https://github.com/TdyP/openScore'}"></span><br /><br />
+  <span [innerHTML]="'about.credit' | translate:{link:'http://linkedin.com/in/teddypaul'}"></span><br /><br />
+  <span [innerHTML]="'about.contact_me' | translate:{link:'mailto:tdy.paul+app@gmail.com'}"></span><br /><br />
 </ion-content>

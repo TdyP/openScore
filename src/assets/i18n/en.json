@@ -7,6 +7,12 @@
     "validate" : "Validate",
     "delete" : "Delete",
     "loading" : "Loading...",
+    "about": {
+        "about": "About",
+        "description": "App free and open-source built upon <a href=\"{{ link }}\">Ionic 2</a>. Source code is available on <a href=\"{{ github }}\">GitHub</a>",
+        "credit": "Made with ♥ by <a href=\"{{ link }}\">Teddy Paul</a>",
+        "contact_me": "Feel free to <a href=\"{{ link }}\">contact me</a> for any remark, question, suggestion or contribution"
+    },
     "home": {
         "new_game": "New game",
         "last_games": "Last games",
@@ -14,7 +20,7 @@
         "rounds_played" : "{{ rounds }} played rounds",
         "remove_confirm_title": "Do you really want to delete this game?",
         "players": "Players",
-        "no_games_played": "No game played. Tap \"+\" to start a game!"
+        "no_games_played": "Tap \"+\" to start a game!"
     },
     "settings": {
         "settings": "Settings",

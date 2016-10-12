@@ -16,6 +16,7 @@ import { ErrorService } from '../providers/error.service';
 /** Components */
 import { HomePage } from '../pages/home/home';
 import { HomeMenu } from '../pages/home/menu/menu';
+import { AboutPage } from '../pages/about/about';
 import { GameSettings } from '../pages/game/settings/settings';
 import { GamePlayers } from '../pages/game/players/players';
 import { GameLive } from '../pages/game/live/live';
@@ -38,6 +39,7 @@ export function translateLoaderFactory(http: any) {
     OpenScore,
     HomePage,
     HomeMenu,
+    AboutPage,
     GameSettings,
     GamePlayers,
     GameLive,
@@ -65,6 +67,7 @@ export function translateLoaderFactory(http: any) {
     OpenScore,
     HomePage,
     HomeMenu,
+    AboutPage,
     GameSettings,
     GamePlayers,
     GameLive,

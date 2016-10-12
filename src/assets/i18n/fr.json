@@ -7,6 +7,12 @@
     "validate" : "Valider",
     "delete" : "Supprimer",
     "loading" : "Chargement...",
+    "about": {
+        "about": "À propos",
+        "description": "Application gratuite et open source développée avec <a href=\"{{ link }}\">Ionic 2</a>. Le code source est disponible sur <a href=\"{{ github }}\">GitHub</a>",
+        "credit": "Fait avec ♥ par <a href=\"{{ link }}\">Teddy Paul</a>",
+        "contact_me": "N'hésitez pas à <a href=\"{{ link }}\">me contacter</a> pour toute remarque, question, suggestion ou contribution"
+    },
     "home": {
         "new_game": "Nouvelle partie",
         "last_games": "Dernières parties",
@@ -14,7 +20,7 @@
         "rounds_played" : "{{ rounds }} manche(s) jouée(s)",
         "remove_confirm_title": "Êtes-vous sûr de vouloir supprimer cette partie?",
         "players": "Joueurs",
-        "no_games_played": "Aucune partie jouée. Appuyez sur \"+\" pour commencer une partie!"
+        "no_games_played": "Appuyez sur \"+\" pour commencer une partie!"
     },
     "settings": {
         "settings": "Paramètres",

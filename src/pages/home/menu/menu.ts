@@ -3,6 +3,7 @@ import { NavController, NavParams, ViewController, App } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { PlayersList } from '../../players/list/list';
+import { AboutPage } from '../../about/about';
 
 @Component({
   templateUrl: 'menu.html'
@@ -25,6 +26,11 @@ export class HomeMenu {
         title: this.translateService.instant('home.players'),
         icon: 'people',
         page: PlayersList
+      },
+      {
+        title: this.translateService.instant('about.about'),
+        icon: 'information-circle',
+        page: AboutPage
       }
     ];
   }
