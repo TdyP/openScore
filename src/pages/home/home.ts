@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from "ng2-translate/ng2-translate";
-import { NavController, AlertController, ActionSheetController, PopoverController, ToastController } from 'ionic-angular';
+import { NavController, AlertController, ActionSheetController, PopoverController, ToastController, LoadingController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
 import { ErrorService } from '../../providers/error.service';
@@ -18,20 +18,26 @@ export class HomePage {
   games: any;
 
   constructor(
-    public navCtrl: NavController,
-    public translateService: TranslateService,
-    public alertCtrl: AlertController,
-    public actionSheetCtrl: ActionSheetController,
-    public popoverCtrl: PopoverController,
-    public toastCtrl: ToastController,
-    public gameService: GameService,
-    public events: Events,
+    private navCtrl: NavController,
+    private translateService: TranslateService,
+    private alertCtrl: AlertController,
+    private actionSheetCtrl: ActionSheetController,
+    private popoverCtrl: PopoverController,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
+    private gameService: GameService,
+    private events: Events,
     private errorServ: ErrorService
   ) {}
 
   ionViewWillEnter() {
+    var loading = this.loadingCtrl.create({
+      content: this.translateService.instant('loading')
+    });
+    loading.present();
     this.gameService.getAllGames()
       .then((games) => {
+        loading.dismiss();
         this.games = games;
       })
       .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.load_all_games')));
@@ -45,11 +51,19 @@ export class HomePage {
   }
 
   public openGame(game: GameModel) {
+    var loading = this.loadingCtrl.create({
+      content: this.translateService.instant('loading')
+    });
+    loading.present();
+
     this.gameService.loadGameDetails(game)
       .then(game => {
-        this.navCtrl.push(GameLive, {game})
+        this.navCtrl.push(GameLive, {game, loading})
       })
-      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.load_game')));
+      .catch(err => {
+        loading.dismiss();
+        this.errorServ.handle(err, this.translateService.instant('errors.load_game'))
+      });
   }
 
   public showActions(game: GameModel) {

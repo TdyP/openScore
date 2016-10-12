@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { TranslateService } from "ng2-translate/ng2-translate";
 
 import { ErrorService } from '../../../providers/error.service';
@@ -21,6 +21,7 @@ export class GameSettings {
   constructor(
     private navCtrl: NavController,
     private navParams: NavParams,
+    private loadingCtrl: LoadingController,
     private errorServ: ErrorService,
     private translateService: TranslateService,
     private gameService: GameService
@@ -54,8 +55,16 @@ export class GameSettings {
       this.navCtrl.push(GamePlayers, {game: this.game});
     }
     else { // Existing game => go back to live view
+      var loading = this.loadingCtrl.create({
+        content: this.translateService.instant('loading')
+      });
+      loading.present();
+
       this.gameService.saveGame(this.game)
-        .then(() => this.navCtrl.pop())
+        .then(() => {
+          loading.dismiss();
+          this.navCtrl.pop();
+        })
         .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
   }

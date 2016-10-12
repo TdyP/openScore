@@ -34,6 +34,11 @@ export class GameLive {
     this.game = this.navParams.get('game');
     this.pendingScore = {};
     this.gameService.updateRanking(this.game);
+
+    let loading = this.navParams.get('loading');
+    if(loading) {
+      loading.dismiss();
+    }
   }
 
   public updateTmpScore(player: PlayerModel, score: number) {

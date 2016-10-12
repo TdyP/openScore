@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { ErrorService } from '../../../providers/error.service';
@@ -23,6 +23,7 @@ export class GamePlayers {
     private navCtrl: NavController,
     private navParams: NavParams,
     private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
     private translateService: TranslateService,
     private PlayerService: PlayerService,
     private gameService: GameService,
@@ -125,16 +126,24 @@ export class GamePlayers {
   }
 
   public validate() {
+    var loading = this.loadingCtrl.create({
+      content: this.translateService.instant('loading')
+    });
+    loading.present();
+
     if(!this.game.id) { // New game => save full and go to live view
       this.gameService.saveGame(this.game)
       .then(() => this.gameService.saveGamePlayers(this.game))
-      .then(() => this.navCtrl.push(GameLive, {game: this.game}))
+      .then(() => this.navCtrl.push(GameLive, {game: this.game, loading}))
       .then(() => this.navCtrl.remove(1,2)) // Remove settings pages from nav
       .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
     else { // Existing game => update players and go back to live view
       this.gameService.saveGamePlayers(this.game)
-      .then(() => this.navCtrl.pop())
+      .then(() => {
+        loading.dismiss();
+        this.navCtrl.pop()
+      })
       .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
   }

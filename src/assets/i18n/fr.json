@@ -6,6 +6,7 @@
     "next" : "Suivant",
     "validate" : "Valider",
     "delete" : "Supprimer",
+    "loading" : "Chargement...",
     "home": {
         "new_game": "Nouvelle partie",
         "last_games": "Dernières parties",

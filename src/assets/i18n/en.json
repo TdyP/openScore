@@ -6,6 +6,7 @@
     "next" : "Next",
     "validate" : "Validate",
     "delete" : "Delete",
+    "loading" : "Loading...",
     "home": {
         "new_game": "New game",
         "last_games": "Last games",
