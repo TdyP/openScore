@@ -73,6 +73,6 @@
         "db_init": "Oops... Error while loading application",
         "load_all_games": "Oops... Can't retrieve last games",
         "load_game": "Oops... Can't load this game",
-        "delete_game": "Oops... Can't delete this game",
+        "delete_game": "Oops... Can't delete this game"
     }
 }
