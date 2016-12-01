@@ -76,3 +76,6 @@ ion-content {
 .action-sheet-group:last-child .action-sheet-button {
   border-top: 1px solid $list-border-color;
 }
+.input-wrapper {
+  position: relative; // To fix issues with input cover taking all width in a list, preventing another icon from being clicked
+}
