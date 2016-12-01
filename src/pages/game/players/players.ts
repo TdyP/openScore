@@ -16,6 +16,7 @@ import { GameLive } from '../live/live';
 export class GamePlayers {
 
   game: GameModel;
+  fromGameMenu: boolean;
   allPlayers: any;
   selectedPlayers: any;
 
@@ -30,6 +31,7 @@ export class GamePlayers {
     private errorServ: ErrorService
   ){
     this.game = this.navParams.get('game');
+    this.fromGameMenu = this.navParams.get('fromGameMenu');
     this.selectedPlayers = [];
   }
 
@@ -135,14 +137,19 @@ export class GamePlayers {
       this.gameService.saveGame(this.game)
       .then(() => this.gameService.saveGamePlayers(this.game))
       .then(() => this.navCtrl.push(GameLive, {game: this.game, loading}))
-      .then(() => this.navCtrl.remove(1,2)) // Remove settings pages from nav
       .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }
     else { // Existing game => update players and go back to live view
       this.gameService.saveGamePlayers(this.game)
       .then(() => {
         loading.dismiss();
-        this.navCtrl.pop()
+
+        if(this.fromGameMenu) {
+          return this.navCtrl.pop();
+        }
+        else {
+          return this.navCtrl.push(GameLive, {game: this.game, loading});
+        }
       })
       .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }

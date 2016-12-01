@@ -14,6 +14,7 @@ import { GamePlayers } from '../players/players';
 export class GameSettings {
 
   game: GameModel;
+  fromGameMenu: boolean;
   goal_enabled: boolean;
   previousGames: any;
   selectedGame: GameModel;
@@ -27,6 +28,7 @@ export class GameSettings {
     private gameService: GameService
   ) {
     this.gameService = gameService;
+    this.fromGameMenu = this.navParams.get('fromGameMenu');
 
     this.game = this.navParams.get('game');
     if(!this.game) {
@@ -63,7 +65,13 @@ export class GameSettings {
       this.gameService.saveGame(this.game)
         .then(() => {
           loading.dismiss();
-          this.navCtrl.pop();
+
+          if(this.fromGameMenu) {
+            return this.navCtrl.pop();
+          }
+          else {
+            return this.navCtrl.push(GamePlayers, {game: this.game});
+          }
         })
         .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
     }

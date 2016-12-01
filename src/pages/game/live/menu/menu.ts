@@ -49,6 +49,6 @@ export class LiveMenu {
 
   public openPage(page) {
     this.viewCtrl.dismiss();
-    this.app.getRootNav().push(page, {game: this.params.get('game')});
+    this.app.getRootNav().push(page, {game: this.params.get('game'), fromGameMenu: true});
   }
 }
