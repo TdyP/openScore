@@ -34,6 +34,10 @@ export function translateLoaderFactory(http: any) {
   return new TranslateStaticLoader(http, './assets/i18n', '.json');
 }
 
+export function localeServiceFactory(localeService: any) {
+  return localeService.getLocale();
+}
+
 @NgModule({
   declarations: [
     OpenScore,
@@ -88,7 +92,7 @@ export function translateLoaderFactory(http: any) {
     { // Set user locale for Date pipes
       provide: LOCALE_ID,
       deps: [LocaleService],
-      useFactory: (localeService) => localeService.getLocale()
+      useFactory: localeServiceFactory
     }
   ]
 })
