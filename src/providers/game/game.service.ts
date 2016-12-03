@@ -218,6 +218,8 @@ export class GameService {
             game.id = res.insertId;
           }
 
+          this.updateRanking(game);
+
           resolve(game);
         }, reject);
     });
