@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, PopoverController, ModalController } from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { ErrorService } from '../../../providers/error.service';
@@ -20,6 +21,7 @@ export class GameLive {
   game: GameModel;
   pendingScore: any;
   tmpScoreDelay: number = 7000;
+  playerBlockHeight: any;
 
   constructor(
     private navCtrl: NavController,
@@ -29,7 +31,10 @@ export class GameLive {
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private gameService: GameService,
-    private errorServ: ErrorService
+    private errorServ: ErrorService,
+    private platform: Platform,
+    private zone: NgZone,
+    private sanitizer: DomSanitizer
   ) {
     this.game = this.navParams.get('game');
     this.pendingScore = {};
@@ -39,6 +44,21 @@ export class GameLive {
     if(loading) {
       loading.dismiss();
     }
+  }
+
+  public ngOnInit() {
+    // Watch for orientation change to update player block height
+    window.addEventListener("orientationchange", function() {
+      this.zone.run(() => {
+        setTimeout(() => {
+          this.setPlayerBlockHeight();
+        }, 800); // Delay update to make sure orientation change rendering is complete
+      })
+    }.bind(this), false);
+  }
+
+  public ionViewWillEnter() {
+    this.setPlayerBlockHeight(); // Init height when view rendering is over
   }
 
   public updateTmpScore(player: PlayerModel, score: number) {
@@ -124,4 +144,22 @@ export class GameLive {
   public openPlayerHistory(player: PlayerModel) {
     this.navCtrl.push(GameHistory, {game: this.game, player});
   }
+
+  /**
+   * Update player block height.
+   * To get the height, we check available height (window - header height - footer height)
+   * and divide it by the number of rows: 1 row per player in portrait, and 2 players per row in landscape
+   */
+  public setPlayerBlockHeight() {
+    let headerHeight = document.querySelector('page-game-live ion-header').clientHeight;
+    let contentHeight = document.querySelector('page-game-live ion-content').clientHeight
+    let footerHeight = document.querySelector('page-game-live ion-footer').clientHeight + 4; // Add arbitrary extra margin to avoid content stuck to footer
+    let availableHeight = contentHeight - headerHeight - footerHeight   ;
+    let rowsCount = window.orientation === 0 ? this.game.players.length : Math.round(this.game.players.length / 2);
+    let elemMargin = window.getComputedStyle(document.querySelector('page-game-live .scroll-content .players .player_wrapper')).margin;
+
+    // We need to sanitize height formula otherwise Angular won't be happy
+    this.playerBlockHeight = this.sanitizer.bypassSecurityTrustStyle(`calc(${availableHeight}px / ${rowsCount} - 2*${elemMargin})`);
+  }
+
 }

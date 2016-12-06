@@ -3,7 +3,6 @@
     <div class="game_details">
       <div class="name">{{ game.name }}</div>
       <div class="rounds">{{ 'live.rounds_played' | translate : { rounds: game.rounds_played } }}</div>
-      <div class="start_date">{{ 'live.started_at' | translate}} {{ game.createdAt | date : 'short' }}</div>
     </div>
     <ion-buttons end>
       <button ion-button (click)="showMenu($event)">
@@ -14,7 +13,7 @@
 </ion-header>
 <ion-content>
   <div class="players">
-    <div class="player_wrapper rank_{{ player.rank }}" *ngFor="let player of game.players | sortByScore : game.score_input">
+    <div class="player_wrapper rank_{{ player.rank }}" [style.height]="playerBlockHeight" *ngFor="let player of game.players | sortByScore : game.score_input">
       <div class="color" [style.background-color]="player.color"></div>
       <div class="flex_wrapper">
         <div class="tmpScore" [hidden]="!player.tmpScore" [ngClass]="{neg: player.tmpScore < 0 }">{{ player.tmpScore }}</div>

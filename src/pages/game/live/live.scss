@@ -3,9 +3,17 @@
 @import "./newRound/newRound";
 
 $colorWidth: 7px;
+$playerWrapperMargin: 5px;
+$gameLiveFooterHeight: 44px;
 
 page-game-live {
   .game_details {
+    @media (orientation: landscape) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .name {
       font-size: 1.2em;
     }
@@ -13,6 +21,10 @@ page-game-live {
     .start_date {
       font-size: 0.9em;
       color: darken( map-get($colors,'mainLight'), 10% );
+
+      @media (orientation: landscape) {
+        display: none;
+      }
     }
   }
   .players {
@@ -22,17 +34,19 @@ page-game-live {
     justify-content: flex-start;
 
     .player_wrapper {
-      $margin: 5px;
       background: darken( map-get($colors,'lightBG'), 2% );
-      margin: $margin;
+      margin: $playerWrapperMargin;
       padding-left: $colorWidth;
       box-shadow: 1px 1px 1px #CCCCCC;
       position: relative;
       width: 100vw;
       min-width: 200px;
+      min-height: 65px;
+      display: flex;
+      align-items: center;
 
       @media (orientation: landscape) and (min-width: 500px) {
-        width: calc(33vw - #{$margin * 2});
+        width: calc(50vw - #{$playerWrapperMargin * 2});
       }
 
       .color {
@@ -47,6 +61,7 @@ page-game-live {
         display: flex;
         flex-direction: row;
         padding: 5px;
+        width: 100%;
 
         .minus, .plus {
           flex: 1 0 30%;
@@ -59,12 +74,6 @@ page-game-live {
             border-radius: 50%;
             width: 3.5em;
             height: 3.5em;
-
-            @media (orientation: landscape) and (max-width: 767px) {
-              width: 2.5em;
-              height: 2.5em;
-            }
-
           }
         }
 
@@ -72,6 +81,8 @@ page-game-live {
           flex: 1 0 40%;
           justify-content: center;
           align-items: flex-start;
+          overflow: hidden;
+          white-space: nowrap;
 
           .name {
             text-align: center;
@@ -79,8 +90,12 @@ page-game-live {
           }
 
           .score {
-            font-size: 2em;
+            font-size: 8vw;
             text-align: center;
+
+            @media (orientation: landscape) {
+              font-size: 6vw;
+            }
           }
         }
 
@@ -109,5 +124,8 @@ page-game-live {
       &.rank_2 .medal { color: #C0C0C0 } // Silver medal
       &.rank_3 .medal { color: #cd7f32 } // Bronze medal
     }
+  }
+  ion-footer {
+    height: $gameLiveFooterHeight;
   }
 }
