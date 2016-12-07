@@ -9,7 +9,7 @@ export class DbService {
 
   public db: SQLite;
   private isReady: boolean = false;
-  private currentVersion: number = 1;
+  private currentVersion: number = 2;
 
   constructor(
     db: SQLite,
@@ -122,7 +122,6 @@ export class DbService {
    */
   /* tslint:disable:no-unused-variable */
 
-
   /**
    * First DB structure init
    *
@@ -143,14 +142,14 @@ export class DbService {
         rounds_played INT,
         favorite      TINYINT(1) DEFAULT 0
       );`,
-      `CREATE INDEX games_dates_idx ON games(modif_date, start_date);`,
+      `CREATE INDEX IF NOT EXISTS games_dates_idx ON games(modif_date, start_date);`,
       `CREATE TABLE IF NOT EXISTS players (
         id     INTEGER PRIMARY KEY AUTOINCREMENT,
         name   VARCHAR(255) NOT NULL,
         selectable INT(1) DEFAULT 0,
         color  INT(6)
       );`,
-      `CREATE INDEX players_name_idx ON players(name);`,
+      `CREATE INDEX IF NOT EXISTS players_name_idx ON players(name);`,
       `CREATE TABLE IF NOT EXISTS participate (
         game_id     INT NOT NULL,
         player_id   INT NOT NULL,
@@ -158,7 +157,7 @@ export class DbService {
         FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
         FOREIGN KEY(player_id) REFERENCES players(id) ON DELETE CASCADE
       );`,
-      `CREATE INDEX particip_game_player_idx ON participate(game_id, player_id);`,
+      `CREATE INDEX IF NOT EXISTS particip_game_player_idx ON participate(game_id, player_id);`,
       `CREATE TABLE IF NOT EXISTS rounds (
         id          INTEGER PRIMARY KEY AUTOINCREMENT,
         game_id     INT NOT NULL,
@@ -168,10 +167,47 @@ export class DbService {
         FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE,
         FOREIGN KEY(player_id) REFERENCES players(id) ON DELETE CASCADE
       );`,
-      `CREATE INDEX rounds_game_idx ON rounds(game_id);`
+      `CREATE INDEX IF NOT EXISTS rounds_game_idx ON rounds(game_id);`
     ];
 
     return this.db.sqlBatch(queries)
      .then(() => this.setDbVersion(1));
+  }
+
+  /**
+   * Rename field "selectable" to "custom_name" in players table
+   * @return {Promise<any>}
+   */
+  private upgrade_2(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // Can"t rename a column with SQLite, so let's do this manually
+      this.db.executeSql('BEGIN TRANSACTION;', [])
+        // Make a copy of existing table
+        .then(() => this.db.executeSql('ALTER TABLE players RENAME TO players_old', []))
+
+        // Create new table with newly named field
+        .then(() => this.db.executeSql(`
+          CREATE TABLE IF NOT EXISTS players (
+          id     INTEGER PRIMARY KEY AUTOINCREMENT,
+          name   VARCHAR(255) NOT NULL,
+          custom_name INT(1) DEFAULT 0,
+          color  INT(6)
+        );
+        `, []))
+
+        // Copy data from old table to new one with new field name
+        .then(() => this.db.executeSql(`INSERT INTO players (id, name, custom_name, color)
+          SELECT id, name, selectable, color FROM players_old`, []))
+
+        // Delete old table
+        .then(() => this.db.executeSql('DROP TABLE players_old',[]))
+
+        // Commit transaction
+        .then(() => this.db.executeSql('COMMIT;',[]))
+
+        .then(() => this.setDbVersion(2))
+        .then(resolve)
+        .catch(reject);
+    });
   }
 }

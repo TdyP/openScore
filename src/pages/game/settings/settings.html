@@ -7,12 +7,11 @@
       <button ion-button light (click)="validate()">
         <span [hidden]="game.id">
           {{ "next" | translate }}
-          <ion-icon name="arrow-forward"></ion-icon>
         </span>
         <span [hidden]="!game.id">
           {{ "validate" | translate }}
-          <ion-icon name="checkmark"></ion-icon>
         </span>
+        &nbsp;<ion-icon name="arrow-forward"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>

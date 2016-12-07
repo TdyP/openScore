@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from "ng2-translate/ng2-translate";
 
 import { PlayerModel } from './player.model';
 import { DbService } from '../db.service';
@@ -6,10 +7,8 @@ import { DbService } from '../db.service';
 @Injectable()
 export class PlayerService {
 
-  db: DbService;
+  constructor(private db: DbService, private translateService: TranslateService) {
 
-  constructor(db: DbService) {
-    this.db = db;
   }
 
   public deletePlayer(player: PlayerModel): Promise<any> {
@@ -31,14 +30,14 @@ export class PlayerService {
   public save(player: PlayerModel): Promise<PlayerModel> {
     return new Promise((resolve, reject) => {
       let query;
-      let params = [player.name, (player.selectable ? 1 : 0), player.color];
+      let params = [player.name, (player.custom_name ? 1 : 0), player.color];
 
       if(player.id) {
-        query = 'UPDATE players SET name = ?, selectable = ?, color = ? WHERE id = ?';
+        query = 'UPDATE players SET name = ?, custom_name = ?, color = ? WHERE id = ?';
         params.push(player.id);
       }
       else {
-        query = 'INSERT INTO players (name, selectable, color) VALUES(?, ?, ?)';
+        query = 'INSERT INTO players (name, custom_name, color) VALUES(?, ?, ?)';
       }
 
       this.db.query(query, params)
@@ -58,10 +57,10 @@ export class PlayerService {
         SELECT
           id,
           name,
-          selectable,
+          custom_name,
           color
         FROM players
-        WHERE selectable = 1
+        WHERE custom_name = 1
         ORDER BY name ASC;
       `)
       .then(res => {
@@ -78,7 +77,7 @@ export class PlayerService {
     });
   }
 
-  public loadPlayerStats(player): Promise<PlayerModel> {
+  public loadPlayerStats(player: PlayerModel): Promise<PlayerModel> {
     return new Promise((resolve, reject) => {
       this.db.query('SELECT count(*) AS count FROM participate WHERE player_id = ? group by player_id',[player.id]) // Get number of games played
       .then(res => {
@@ -87,5 +86,9 @@ export class PlayerService {
       })
       .catch(reject);
     })
+  }
+
+  public getDefaultName(index: number) {
+    return this.translateService.instant('players.default_name', {index});
   }
 }

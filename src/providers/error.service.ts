@@ -14,6 +14,8 @@ export class ErrorService {
    * @param {String} msg  User friendly message
    */
   public handle(error: any, msg ?: string) {
+    console.error(error);
+
     // If a message is provided, display it to user
     if(msg) {
       let toast = this.toastCtrl.create({
@@ -25,8 +27,5 @@ export class ErrorService {
       });
       toast.present();
     }
-
-    console.error(error);
   }
-
 }

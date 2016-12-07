@@ -6,6 +6,7 @@ import { ErrorService } from '../../../providers/error.service';
 import { GameModel } from '../../../providers/game/game.model';
 import { GameService } from '../../../providers/game/game.service';
 import { PlayerService } from '../../../providers/player/player.service';
+import { PlayerModel } from '../../../providers/player/player.model';
 
 import { GameLive } from '../live/live';
 
@@ -86,7 +87,7 @@ export class GamePlayers {
     if (selection.id) {
       this.game.players[index].id = selection.id;
       this.game.players[index].name = selection.name;
-      this.game.players[index].selectable = selection.selectable;
+      this.game.players[index].custom_name = selection.custom_name;
     }
     else {
       delete this.game.players[index].id;
@@ -95,7 +96,7 @@ export class GamePlayers {
   }
 
   public setPlayerSelectable(player) {
-    player.selectable = true;
+    player.custom_name = true;
   }
 
   public removePlayer(player) {
@@ -161,7 +162,6 @@ export class GamePlayers {
     if (existingPlayersCount < playersNumber) {
       let numberToGenerate = playersNumber - existingPlayersCount;
       for(let i = 0; i < numberToGenerate; i++) {
-        let name = this.getDefaultName(existingPlayersCount + (i + 1));
         this.game.addPlayer({name}, playersNumber);
       }
     }

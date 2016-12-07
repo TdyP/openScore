@@ -6,7 +6,7 @@ export class PlayerModel {
   id: number;
   name: string = '';
   color: string;
-  selectable: boolean = false;
+  custom_name: boolean = false;
   score: number = 0;
   tmpScore: number = 0; // Used to delay the score saving
   rank: number = 0;
@@ -17,7 +17,7 @@ export class PlayerModel {
       this.id = data.id;
       this.name = data.name;
       this.color = data.color || this.getRandomColor(playerIndex);
-      this.selectable = !!data.selectable;
+      this.custom_name = !!data.custom_name;
       this.rank = data.rank || playerIndex + 1;
       this.stats = data.stats || {};
     }

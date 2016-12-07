@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
 /**
- * Pipe used to filter selectable players list. Already used players are removed from list
+ * Pipe used to sort games: favorites first, then sorted by date (most recent first)
  */
 @Pipe({
     name: 'sortGames',
