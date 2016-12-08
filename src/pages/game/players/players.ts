@@ -115,7 +115,10 @@ export class GamePlayers {
   public removePlayer(player) {
     let self = this;
     let doRemove = function() {
-      self.gameService.removePlayer(self.game, player);
+      self.gameService.removePlayer(self.game, player)
+        .then(() => {
+          self.updatePlayersColors()
+        });
     }
 
     if(this.game.id && player.id) {
@@ -188,5 +191,11 @@ export class GamePlayers {
 
   public getDefaultName(index) {
     return this.playerService.getDefaultName(index);
+  }
+
+  private updatePlayersColors() {
+    this.game.players.forEach((player, index) => {
+      player.color = player.getRandomColor(index);
+    });
   }
 }
