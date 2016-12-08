@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { TranslateService } from "ng2-translate/ng2-translate";
+import _ from 'lodash';
 
 import { ErrorService } from '../../../providers/error.service';
 import { GameService } from '../../../providers/game/game.service';
@@ -14,6 +15,7 @@ import { GamePlayers } from '../players/players';
 export class GameSettings {
 
   game: GameModel;
+  origGame: GameModel;
   fromGameMenu: boolean;
   goal_enabled: boolean;
   previousGames: any;
@@ -27,18 +29,22 @@ export class GameSettings {
     private translateService: TranslateService,
     private gameService: GameService
   ) {
+
     this.gameService = gameService;
     this.fromGameMenu = this.navParams.get('fromGameMenu');
 
-    this.game = this.navParams.get('game');
-    if(!this.game) {
-      this.game = new GameModel();
+    this.origGame = this.navParams.get('game');
+    if(!this.origGame) {
+      this.origGame = new GameModel();
       this.gameService.getGame()
         .then(game => {
-          this.game = game
+          this.origGame = game
         })
         .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.load_game')));
     }
+
+    // Duplicate the game to be able to cancel modifications if user hit back button
+    this.game = _.cloneDeep(this.origGame);
 
     this.goal_enabled = false;
     this.previousGames = [];
@@ -67,6 +73,8 @@ export class GameSettings {
           loading.dismiss();
 
           if(this.fromGameMenu) {
+            // On this case, we just pop this page from the nav so we need to manually update live page data
+            Object.assign(this.origGame,this.game);
             return this.navCtrl.pop();
           }
           else {

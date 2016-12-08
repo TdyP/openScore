@@ -166,7 +166,15 @@ export class GameService {
     return new Promise((resolve, reject) => {
       this.clearParticipations(game)
         .then(() => {
-          return Promise.all(game.players.map((playerToSave) => {
+          return Promise.all(game.players.map((playerToSave, index) => {
+            if(!playerToSave.name) {
+              playerToSave.name = this.playerService.getDefaultName(index + 1);
+              playerToSave.custom_name = false;
+            }
+            else {
+              playerToSave.custom_name = true;
+            }
+
             return this.playerService.save(playerToSave)
               .then(savedPlayer => this.saveParticipation(game, savedPlayer));
           }))

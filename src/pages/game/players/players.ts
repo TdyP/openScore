@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
+import _ from 'lodash';
 
 import { ErrorService } from '../../../providers/error.service';
 import { GameModel } from '../../../providers/game/game.model';
 import { GameService } from '../../../providers/game/game.service';
 import { PlayerService } from '../../../providers/player/player.service';
-import { PlayerModel } from '../../../providers/player/player.model';
 
 import { GameLive } from '../live/live';
 
@@ -17,9 +17,10 @@ import { GameLive } from '../live/live';
 export class GamePlayers {
 
   game: GameModel;
+  origGame: GameModel;
   fromGameMenu: boolean;
-  allPlayers: any;
-  selectedPlayers: any;
+  allPlayers: any; // List of all players to select an existing player
+  selectedPlayers: any; // To handle existing player selection
 
   constructor(
     private navCtrl: NavController,
@@ -27,12 +28,18 @@ export class GamePlayers {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private translateService: TranslateService,
-    private PlayerService: PlayerService,
+    private playerService: PlayerService,
     private gameService: GameService,
     private errorServ: ErrorService
   ){
-    this.game = this.navParams.get('game');
+    // Duplicate the game to be able to cancel modifications if user hit back button
+    this.origGame = this.navParams.get('game');
+    this.game = _.cloneDeep(this.navParams.get('game'));
+
+
+    // Did user click on "players" on the menu or is he coming from "settings" page?
     this.fromGameMenu = this.navParams.get('fromGameMenu');
+
     this.selectedPlayers = [];
   }
 
@@ -41,7 +48,13 @@ export class GamePlayers {
       this.defineNumber();
     }
 
-    this.PlayerService.getAllPlayers()
+    this.game.players.forEach(player => {
+      if(!player.custom_name) {
+        player.name = '';
+      }
+    });
+
+    this.playerService.getAllPlayers()
       .then(players => {
         this.allPlayers = players;
       })
@@ -146,6 +159,8 @@ export class GamePlayers {
         loading.dismiss();
 
         if(this.fromGameMenu) {
+          // On this case, we just pop this page from the nav so we need to manually update live page data
+          this.origGame.players = this.game.players;
           return this.navCtrl.pop();
         }
         else {
@@ -172,6 +187,6 @@ export class GamePlayers {
   }
 
   public getDefaultName(index) {
-    return this.translateService.instant('players.default_name', {index})
+    return this.playerService.getDefaultName(index);
   }
 }
