@@ -20,7 +20,7 @@ export class GameLive {
 
   game: GameModel;
   pendingScore: any;
-  tmpScoreDelay: number = 7000;
+  tmpScoreDelay: number = 5000;
   playerBlockHeight: any;
 
   constructor(
