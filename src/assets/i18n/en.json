@@ -17,7 +17,7 @@
         "new_game": "New game",
         "last_games": "Last games",
         "players_count": "{{ count }} players",
-        "rounds_played" : "{{ rounds }} played rounds",
+        "rounds_played" : "{{ rounds }} rounds played",
         "remove_confirm_title": "Do you really want to delete this game?",
         "players": "Players",
         "no_games_played": "Tap \"+\" to start a game!"
@@ -58,7 +58,7 @@
         "settings": "Settings",
         "players": "Players",
         "started_at" : "Game started",
-        "rounds_played" : "{{ rounds }} played rounds",
+        "rounds_played" : "{{ rounds }} rounds played",
         "new_round": "New round"
     },
     "player_view": {
