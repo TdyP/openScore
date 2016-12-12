@@ -45,7 +45,7 @@
         "number": "Number of players",
         "default_name" : "Player {{index}}",
         "new_player" : "New player",
-        "remove_confirm_title" : "Do you really want to delete this player?",
+        "remove_confirm_title" : "Do you really want to delete {{ name }}?",
         "remove_confirm_msg" : "His score will be definitively deleted",
         "lets_go" : "Let's go!"
     },

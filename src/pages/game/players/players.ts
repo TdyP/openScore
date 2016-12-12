@@ -112,7 +112,7 @@ export class GamePlayers {
     player.custom_name = true;
   }
 
-  public removePlayer(player) {
+  public removePlayer(player, index) {
     let self = this;
     let doRemove = function() {
       self.gameService.removePlayer(self.game, player)
@@ -123,7 +123,7 @@ export class GamePlayers {
 
     if(this.game.id && player.id) {
       this.alertCtrl.create({
-        title: this.translateService.instant('players.remove_confirm_title'),
+        title: this.translateService.instant('players.remove_confirm_title', {name: player.name ? player.name : this.getDefaultName(index + 1)}),
         message: this.translateService.instant('players.remove_confirm_msg'),
         buttons: [
           {
