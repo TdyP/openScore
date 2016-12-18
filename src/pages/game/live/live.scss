@@ -46,7 +46,7 @@ page-game-live {
       align-items: center;
 
       @media (orientation: landscape) and (min-width: 500px) {
-        width: calc(50vw - #{$playerWrapperMargin * 2});
+        width: calc(50% - #{$playerWrapperMargin * 2});
       }
 
       .color {

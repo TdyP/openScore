@@ -1,6 +1,5 @@
 page-game-chart {
   .chart {
-    display: block;
-    height: 100%;
+    height: calc(100% - #{$toolbar-md-height});
   }
 }

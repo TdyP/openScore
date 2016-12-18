@@ -48,11 +48,9 @@ export class GameLive {
 
   public ngOnInit() {
     // Watch for orientation change to update player block height
-    window.addEventListener("orientationchange", function() {
+    window.addEventListener("resize", function() {
       this.zone.run(() => {
-        setTimeout(() => {
-          this.setPlayerBlockHeight();
-        }, 800); // Delay update to make sure orientation change rendering is complete
+        this.setPlayerBlockHeight();
       })
     }.bind(this), false);
   }
@@ -151,11 +149,12 @@ export class GameLive {
    * and divide it by the number of rows: 1 row per player in portrait, and 2 players per row in landscape
    */
   public setPlayerBlockHeight() {
+    let isPortrait = window.outerHeight > window.outerWidth;
     let headerHeight = document.querySelector('page-game-live ion-header').clientHeight;
     let contentHeight = document.querySelector('page-game-live ion-content').clientHeight
     let footerHeight = document.querySelector('page-game-live ion-footer').clientHeight + 4; // Add arbitrary extra margin to avoid content stuck to footer
     let availableHeight = contentHeight - headerHeight - footerHeight   ;
-    let rowsCount = window.orientation === 0 ? this.game.players.length : Math.round(this.game.players.length / 2);
+    let rowsCount = isPortrait ? this.game.players.length : Math.round(this.game.players.length / 2);
     let elemMargin = window.getComputedStyle(document.querySelector('page-game-live .scroll-content .players .player_wrapper')).margin;
 
     // We need to sanitize height formula otherwise Angular won't be happy
