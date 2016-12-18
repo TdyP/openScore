@@ -149,7 +149,8 @@ export class GameLive {
    * and divide it by the number of rows: 1 row per player in portrait, and 2 players per row in landscape
    */
   public setPlayerBlockHeight() {
-    let isPortrait = window.outerHeight > window.outerWidth;
+    let mql = window.matchMedia("(orientation: portrait)");
+    let isPortrait = mql.matches;
     let headerHeight = document.querySelector('page-game-live ion-header').clientHeight;
     let contentHeight = document.querySelector('page-game-live ion-content').clientHeight
     let footerHeight = document.querySelector('page-game-live ion-footer').clientHeight + 4; // Add arbitrary extra margin to avoid content stuck to footer
