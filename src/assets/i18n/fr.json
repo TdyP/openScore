@@ -36,7 +36,7 @@
         "points": "points",
         "score_input": "Saisie des scores",
         "score_input_player": "Par joueur",
-        "score_input_round": "Par manche"
+        "score_input_round": "Fin de la manche"
     },
     "players": {
         "players": "Joueurs",
