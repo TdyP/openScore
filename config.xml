@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.openscore787914" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>openScore</name>
-  <description>App to keep score for all your board games and more!</description>
-  <author email="tdy.paul+os@gmail.com" href="https://github.com/TdyP">Teddy Paul</author>
+  <name>OpenScore</name>
+  <description>App to keep score for all your games</description>
+  <author email="tdy.paul+gp@gmail.com" href="https://github.com/TdyP">Teddy Paul</author>
   <content src="index.html"/>
   <access origin="*"/>
   <allow-intent href="http://*/*"/>
@@ -57,4 +57,5 @@
   <plugin name="cordova-plugin-statusbar" spec="~2.2.0"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <allow-navigation href="http://192.168.56.1:8100"/>
 </widget>
