@@ -19,7 +19,7 @@
       <div (click)="openGame(game)" (press)="showActions(game)">
         <span class="name">{{ game.name }}</span>
         <p>{{ 'home.players_count' | translate:{count: game.players_count} }}</p>
-        <p>{{ 'home.rounds_played' | translate:{rounds: game.rounds_played} }}</p>
+        <p><span [hidden]="!game.ended">{{ "live.game_over" | translate }} - </span>{{ 'home.rounds_played' | translate:{rounds: game.rounds_played} }}</p>
         <p>{{ game.modifAt | date : 'short' }}</p>
       </div>
       <ion-icon class="favorite-icon" name="{{ game.favorite ? 'star': 'star-outline'}}" item-right (click)="toggleFavorite(game)"></ion-icon>

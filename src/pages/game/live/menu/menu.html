@@ -1,5 +1,5 @@
 <ion-list>
-  <ion-item *ngFor="let link of links" (click)="openPage(link.page)">
+  <ion-item *ngFor="let link of links" (click)="handleMenuClick(link)">
     <ion-label>{{ link.title }}</ion-label>
     <ion-icon name="{{ link.icon }}" item-left></ion-icon>
   </ion-item>

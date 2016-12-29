@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ 'live.game_over' | translate }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padded>
+  <div class="winner_wrapper">
+    {{ "live.winner_is" | translate }}
+    <div class="winner_name">{{ winner.name }}</div>
+    <div class="winner_score">{{ "live.winner_score" | translate:{score: winner.score} }}</div>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-buttons end>
+    <button ion-button clear light (click)="dismiss()">
+      {{ "OK" | translate }}
+    </button>
+  </ion-buttons>
+</ion-footer>

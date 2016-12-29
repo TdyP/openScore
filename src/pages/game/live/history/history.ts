@@ -72,41 +72,43 @@ export class GameHistory {
    * @param {any} round
    */
   public showActions(round: any, player: PlayerModel) {
-    let actionSheet = this.actionSheetCtrl.create({
-      buttons: [
-        {
-          text: this.translateService.instant('edit'),
-          icon: 'create',
-          handler: () => {
-            actionSheet.dismiss()
-            .then(() => {
-              this.editRound(round, player);
-            });
+    if(!this.game.ended) {
+      let actionSheet = this.actionSheetCtrl.create({
+        buttons: [
+          {
+            text: this.translateService.instant('edit'),
+            icon: 'create',
+            handler: () => {
+              actionSheet.dismiss()
+              .then(() => {
+                this.editRound(round, player);
+              });
 
-            return false;
-          }
-        },
-        {
-          text: this.translateService.instant('delete'),
-          role: 'destructive',
-          icon: 'trash',
-          handler: () => {
-            actionSheet.dismiss()
-            .then(() => {
-              this.deleteRound(round, player);
-            });
+              return false;
+            }
+          },
+          {
+            text: this.translateService.instant('delete'),
+            role: 'destructive',
+            icon: 'trash',
+            handler: () => {
+              actionSheet.dismiss()
+              .then(() => {
+                this.deleteRound(round, player);
+              });
 
-            return false;
+              return false;
+            }
+          },
+          {
+            text: this.translateService.instant('cancel'),
+            role: 'cancel',
+            icon: 'close'
           }
-        },
-        {
-          text: this.translateService.instant('cancel'),
-          role: 'cancel',
-          icon: 'close'
-        }
-      ]
-    });
-    actionSheet.present();
+        ]
+      });
+      actionSheet.present();
+    }
   }
 
   /**

@@ -47,7 +47,12 @@
         "new_player" : "New player",
         "remove_confirm_title" : "Do you really want to delete {{ name }}?",
         "remove_confirm_msg" : "His score will be definitively deleted",
-        "lets_go" : "Let's go!"
+        "lets_go" : "Let's go!",
+        "end_game": "Game over",
+        "end_game_confirm": "Do you want really want to end this game?",
+        "game_over": "Game Over",
+        "winner_is": "The winner is",
+        "winner_score": "{{ score }} points"
     },
     "live": {
         "substract" : "Substract",

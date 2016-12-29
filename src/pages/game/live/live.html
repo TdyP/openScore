@@ -2,7 +2,10 @@
   <ion-navbar>
     <div class="game_details">
       <div class="name">{{ game.name }}</div>
-      <div class="rounds">{{ 'live.rounds_played' | translate : { rounds: game.rounds_played } }}</div>
+      <div class="rounds">
+        <span [hidden]="!game.ended">{{ "live.game_over" | translate }} - </span>
+        {{ 'live.rounds_played' | translate : { rounds: game.rounds_played } }}
+      </div>
     </div>
     <ion-buttons end>
       <button ion-button (click)="showMenu($event)">
@@ -13,11 +16,11 @@
 </ion-header>
 <ion-content>
   <div class="players">
-    <div class="player_wrapper rank_{{ player.rank }}" [style.height]="playerBlockHeight" *ngFor="let player of game.players | sortByScore : game.score_input">
+    <div class="player_wrapper rank_{{ player.rank }}" [style.height]="playerBlockHeight" *ngFor="let player of game.players | sortByScore : game.score_input : game.ended">
       <div class="color" [style.background-color]="player.color"></div>
       <div class="flex_wrapper">
         <div class="tmpScore" [hidden]="!player.tmpScore" [ngClass]="{neg: player.tmpScore < 0 }">{{ player.tmpScore }}</div>
-        <div class="minus" [hidden]="game.score_input !== 'player'">
+        <div class="minus" [hidden]="game.score_input !== 'player' || game.ended">
           <button ion-button round (click)="updateTmpScore(player, -1)" (press)="openScoreModal(player, true)">
             <ion-icon name="remove"></ion-icon>
           </button>
@@ -31,7 +34,7 @@
             {{player.score}}
           </div>
         </div>
-        <div class="plus" [hidden]="game.score_input !== 'player'">
+        <div class="plus" [hidden]="game.score_input !== 'player' || game.ended">
           <button ion-button round (click)="updateTmpScore(player, 1)" (press)="openScoreModal(player)">
             <ion-icon name="add"></ion-icon>
           </button>
@@ -40,7 +43,7 @@
     </div>
   </div>
 </ion-content>
-<ion-footer [hidden]="game.score_input !== 'round'">
+<ion-footer [hidden]="game.score_input !== 'round' || game.ended">
   <ion-buttons end>
     <button ion-button clear light (click)="newRound()">
       <ion-icon name="add-circle" item-left></ion-icon>&nbsp;

@@ -1,0 +1,43 @@
+// Animation
+// See https://github.com/daneden/animate.css/blob/master/animate.css
+@keyframes tada {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+page-game-over {
+  .winner_wrapper {
+    margin-top: 50%;
+    text-align: center;
+    font-size: 1.8rem;
+
+    .winner_name {
+      font-size: 4rem;
+      color: #FFD700;
+      animation-duration: 1.5s;
+      animation-name: tada;
+    }
+
+    .winner_score {
+      font-size: 1.5rem;
+      color: #999999;
+    }
+  }
+}

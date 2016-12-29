@@ -59,7 +59,13 @@
         "players": "Joueurs",
         "started_at" : "Partie débutée le",
         "rounds_played" : "{{ rounds }} manche(s) jouée(s)",
-        "new_round": "Nouvelle manche"
+        "new_round": "Nouvelle manche",
+        "end_game": "Fin de la partie",
+        "end_game_confirm": "Êtes-vous sûr de vouloir mettre fin à la partie?",
+        "game_over": "Partie terminée",
+        "winner_is": "Victoire de",
+        "winner_score": "{{ score }} points"
+
     },
     "player_view": {
         "games_played": "{{ count }} parties jouées"

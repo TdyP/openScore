@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from 'ng2-translate/ng2-translate';
+import { Events } from 'ionic-angular';
 
 import { DbService } from '../db.service';
 import { PlayerService } from '../player/player.service';
@@ -11,8 +12,9 @@ export class GameService {
 
   constructor(
     private db: DbService,
-    public playerService: PlayerService,
-    public translateService: TranslateService
+    private playerService: PlayerService,
+    private translateService: TranslateService,
+    private events: Events
   ) {}
 
   /**
@@ -34,6 +36,7 @@ export class GameService {
             g.score_type,
             g.rounds_played,
             g.favorite,
+            g.ended,
             COUNT(p.player_id) AS players_count
           FROM games AS g
           LEFT JOIN participate AS p ON p.game_id = g.id
@@ -385,5 +388,23 @@ export class GameService {
     }
 
     game.rounds_played = roundsPlayed;
+  }
+
+/**
+ * Set game as ended, save it to DB and publish an event to tell the app the game is over
+ * @param  {GameModel}    game
+ * @return {Promise<any>}      Resolved when game is saved and event published
+ */
+  public endGame(game: GameModel): Promise<any> {
+    return new Promise((resolve, reject) => {
+      game.endGame();
+
+      this.db.query('UPDATE games SET ended = ? WHERE id = ?', [game.ended ? 1 : 0, game.id])
+        .then(() => {
+          this.events.publish('game:ended', game);
+          resolve();
+        })
+        .catch(reject);
+    });
   }
 }

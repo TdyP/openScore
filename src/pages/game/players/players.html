@@ -13,22 +13,22 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button (click)="defineNumber()" full block>
+  <button ion-button (click)="defineNumber()" [disabled]="game.ended" full block>
     {{ "players.number" | translate }} : {{ game.players.length || 0 }}
   </button>
   <ion-list class="players_list">
     <ion-item *ngFor="let player of game.players; let i = index">
       <span class="player_color" [style.background-color]="player.color" item-left></span>
-      <ion-input type="text" placeholder="{{ getDefaultName(i+1) }}" [(ngModel)]="player.name" [disabled]="!game.id && player.id"></ion-input>
-      <ion-select interface="action-sheet" class="player_select" [hidden]="game.id" [(ngModel)]="selectedPlayers[i]" (ionChange)="playerSelected(i)" cancelText="{{ 'cancel' | translate }}">
+      <ion-input type="text" placeholder="{{ getDefaultName(i+1) }}" [(ngModel)]="player.name" [disabled]="game.ended || (!game.id && player.id)"></ion-input>
+      <ion-select interface="action-sheet" class="player_select" [hidden]="game.id || game.ended" [(ngModel)]="selectedPlayers[i]" (ionChange)="playerSelected(i)" cancelText="{{ 'cancel' | translate }}">
         <ion-option [value]="{}">{{ 'players.new_player' | translate }}</ion-option>
         <ion-option *ngFor="let p of ( allPlayers | availablePlayers : game.getPlayersIds() )" [value]="p">{{ p.name }}</ion-option>
       </ion-select>
-      <ion-icon name="remove-circle" (click)="removePlayer(player, i)" item-right></ion-icon>
+      <ion-icon name="remove-circle" (click)="removePlayer(player, i)" item-right [hidden]="game.ended"></ion-icon>
     </ion-item>
   </ion-list>
   <ion-buttons end>
-    <button ion-button clear (click)="addPlayer()">
+    <button ion-button clear (click)="addPlayer()" [hidden]="game.ended">
       <ion-icon name="add-circle"></ion-icon>
       {{ "players.add" | translate }}
     </button>

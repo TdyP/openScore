@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform } from 'ionic-angular';
+import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform, Events } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { ErrorService } from '../../../providers/error.service';
@@ -11,6 +11,7 @@ import { PlayerModel } from '../../../providers/player/player.model';
 import { LiveMenu } from './menu/menu';
 import { GameHistory } from './history/history';
 import { NewRoundModal } from './newRound/newRound';
+import { GameOverModal } from './gameOver/gameOver';
 
 @Component({
   selector: 'page-game-live',
@@ -30,6 +31,7 @@ export class GameLive {
     private popoverCtrl: PopoverController,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
+    private events: Events,
     private gameService: GameService,
     private errorServ: ErrorService,
     private platform: Platform,
@@ -44,6 +46,8 @@ export class GameLive {
     if(loading) {
       loading.dismiss();
     }
+
+    events.subscribe('game:ended', () => this.handleGameEnded());
   }
 
   public ngOnInit() {
@@ -160,6 +164,19 @@ export class GameLive {
 
     // We need to sanitize height formula otherwise Angular won't be happy
     this.playerBlockHeight = this.sanitizer.bypassSecurityTrustStyle(`calc(${availableHeight}px / ${rowsCount} - 2*${elemMargin})`);
+  }
+
+  public handleGameEnded() {
+    this.modalCtrl.create(GameOverModal,
+      {
+        game: this.game
+      },
+      {
+        showBackdrop: true,
+        enableBackdropDismiss: true
+      }
+    )
+    .present();
   }
 
 }

@@ -22,6 +22,7 @@ import { GamePlayers } from '../pages/game/players/players';
 import { GameLive } from '../pages/game/live/live';
 import { LiveMenu } from '../pages/game/live/menu/menu';
 import { NewRoundModal } from '../pages/game/live/newRound/newRound';
+import { GameOverModal } from '../pages/game/live/gameOver/gameOver';
 import { GameChart } from '../pages/game/live/chart/chart';
 import { GameHistory } from '../pages/game/live/history/history';
 import { PlayersList } from '../pages/players/list/list';
@@ -49,6 +50,7 @@ export function localeServiceFactory(localeService: any) {
     GameLive,
     LiveMenu,
     NewRoundModal,
+    GameOverModal,
     GameChart,
     GameHistory,
     PlayersList,
@@ -77,6 +79,7 @@ export function localeServiceFactory(localeService: any) {
     GameLive,
     LiveMenu,
     NewRoundModal,
+    GameOverModal,
     GameChart,
     GameHistory,
     PlayersList,
@@ -89,6 +92,7 @@ export function localeServiceFactory(localeService: any) {
     ErrorService,
     GameService,
     PlayerService,
+    SortByScorePipe,
     { // Set user locale for Date pipes
       provide: LOCALE_ID,
       deps: [LocaleService],

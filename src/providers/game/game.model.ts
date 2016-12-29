@@ -21,6 +21,7 @@ export class GameModel {
   rounds: Array<any> = [];
   createdAt: Date;
   modifAt: Date;
+  ended: boolean = false;
 
   constructor(data ?: any) {
 
@@ -38,6 +39,7 @@ export class GameModel {
       this.players = data.players || [];
       this.players_count = data.players_count || (data.players ? data.players.length : 0);
       this.rounds = data.rounds || [];
+      this.ended = data.ended || false;
     }
     else {
       this.start_date = Date.now();
@@ -80,5 +82,9 @@ export class GameModel {
 
   public getPlayersIds() {
     return this.players.filter(player => !!player.id).map((player) => player.id);
+  }
+
+  public endGame() {
+    this.ended = true;
   }
 }
