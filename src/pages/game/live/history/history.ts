@@ -161,7 +161,7 @@ export class GameHistory {
             let oldScore = round.score;
             round.score = Number(data.score);
             player.score += (-oldScore + round.score);
-            this.gameService.updateRound(round)
+            this.gameService.updateRound(round, this.game)
               .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
           }
         }

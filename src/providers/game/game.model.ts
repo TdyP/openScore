@@ -11,8 +11,8 @@ export class GameModel {
   modif_date: number = Date.now();
   score_type: string = 'asc';
   score_input: string = 'round';
-  goal: number;
-  goal_type: string;
+  goal: number = 0;
+  goal_type: string = 'none';
   favorite: boolean = false;
   rounds_played: number = 0;
   players_count: number;
@@ -33,7 +33,7 @@ export class GameModel {
       this.score_type = data.score_type;
       this.score_input = data.score_input;
       this.goal = data.goal;
-      this.goal_type = data.goal_type;
+      this.goal_type = data.goal_type || 'none';
       this.favorite = !!data.favorite;
       this.rounds_played = data.rounds_played || 0;
       this.players = data.players || [];

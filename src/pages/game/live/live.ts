@@ -47,7 +47,8 @@ export class GameLive {
       loading.dismiss();
     }
 
-    events.subscribe('game:ended', () => this.handleGameEnded());
+    events.subscribe(`game:${this.game.id}:ended`, () => this.handleGameEnded());
+    events.subscribe(`game:${this.game.id}:score_updated`, () => this.checkGameEnd());
   }
 
   public ngOnInit() {
@@ -177,6 +178,33 @@ export class GameLive {
       }
     )
     .present();
+  }
+
+  /**
+   * Check if we reach the game end, based on game settings.
+   * If goal type is score => check players score
+   * If goal type if round => check rounds count
+   */
+  public checkGameEnd() {
+    let gameOver = false;
+
+    if(this.game.goal_type === 'rounds') {
+      if(this.game.rounds_played >= this.game.goal) {
+        gameOver = true;
+      }
+    }
+    else if(this.game.goal_type === 'score') {
+      for(let player of this.game.players) {
+        if(player.score >= this.game.goal) {
+          gameOver = true;
+          break;
+        }
+      }
+    }
+
+    if(gameOver) {
+      this.gameService.endGame(this.game);
+    }
   }
 
 }

@@ -39,5 +39,19 @@
         <ion-option value="round">{{ "settings.score_input_round" | translate }}</ion-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label>{{ "settings.game_end" | translate }}</ion-label>
+      <ion-select interface="action-sheet" [(ngModel)]="game.goal_type" [selectOptions]="getEndGameOptions()" cancelText="{{ 'cancel' | translate }}" [disabled]="game.ended">
+        <ion-option *ngFor="let opt of getEndGameOptions()" [value]="opt.value">{{ opt.title }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item [hidden]="game.goal_type !== 'score'">
+      <ion-label>{{ "settings.target_score" | translate }}</ion-label>
+      <ion-input type="number" [(ngModel)]="game.goal" [disabled]="game.ended" text-right></ion-input>
+    </ion-item>
+    <ion-item [hidden]="game.goal_type !== 'rounds' || game.score_input !== 'round'">
+      <ion-label>{{ "settings.target_rounds" | translate }}</ion-label>
+      <ion-input type="number" [(ngModel)]="game.goal" [disabled]="game.ended" text-right></ion-input>
+    </ion-item>
   </ion-list>
 </ion-content>

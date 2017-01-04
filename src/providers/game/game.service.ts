@@ -60,6 +60,12 @@ export class GameService {
     });
   }
 
+  /**
+   * Get game from ID or a new one if ID not provided
+   *
+   * @param  {number}             id
+   * @return {Promise<GameModel>}
+   */
   public getGame(id ?: number): Promise<GameModel> {
     return new Promise((resolve, reject) => {
       if(id) {
@@ -106,7 +112,7 @@ export class GameService {
 
           scores[item.player_id] += item.score;
 
-          this.addRound(game, item, false);
+          this.addRound(game, item, false, true);
         }
 
         // Retrieve players
@@ -134,7 +140,7 @@ export class GameService {
         resolve(game);
       }
 
-      // Retrive played rounds
+      // Retrieve played rounds
       this.getGame(game.id)
       .then(detailedGame => {
         game = detailedGame;
@@ -150,7 +156,12 @@ export class GameService {
     });
   }
 
-  public deleteGame(game: GameModel) {
+  /**
+   * Delete a game from DB
+   * @param {GameModel} game
+   * @return {Promise<any>}
+   */
+  public deleteGame(game: GameModel): Promise<any> {
     return new Promise((resolve, reject) => {
       this.db.query('DELETE FROM games WHERE id = ?', [game.id])
         .then(() => this.db.query('DELETE FROM participate WHERE game_id = ?', [game.id]))
@@ -161,8 +172,10 @@ export class GameService {
   }
 
   /**
-   * Save game
+   * Save game players only
+   *
    * @param {GameModel} game     Game to save
+   * @return {Promise<GameModel>}
    */
   public saveGamePlayers(game: GameModel): Promise<GameModel> {
 
@@ -188,10 +201,24 @@ export class GameService {
 
   }
 
+  /**
+   * Clear all participations from DB.
+   * Used to clear up DB table before saving game players
+   *
+   * @param  {GameModel}    game
+   * @return {Promise<any>}
+   */
   public clearParticipations(game: GameModel): Promise<any> {
     return this.db.query('DELETE FROM participate WHERE game_id = ?', [game.id]);
   }
 
+  /**
+   * Link a player to a game in DB
+   *
+   * @param  {GameModel}            game
+   * @param  {PlayerModel}          player
+   * @return {Promise<PlayerModel>}
+   */
   public saveParticipation(game: GameModel, player: PlayerModel): Promise<PlayerModel> {
     return new Promise((resolve, reject) => {
       this.db.query(`INSERT INTO participate (game_id, player_id) VALUES(?, ?)`, [game.id, player.id])
@@ -200,6 +227,12 @@ export class GameService {
     });
   }
 
+  /**
+   * Save a game
+   *
+   * @param {GameModel} game
+   * @return {Promise<GameModel>}
+   */
   public saveGame(game: GameModel) {
     return new Promise((resolve, reject) => {
       let query;
@@ -236,14 +269,27 @@ export class GameService {
     });
   }
 
-  public updateScore(game: GameModel, player: PlayerModel, score: number): Promise<any> {
+  /**
+   * Update player score: update score in player object, update game ranking and add round to game
+   * @param  {GameModel}    game
+   * @param  {PlayerModel}  player
+   * @param  {number}       score
+   * @param  {boolean}      skipScoreUpdatePub
+   * @return {Promise<any>}
+   */
+  public updateScore(game: GameModel, player: PlayerModel, score: number, skipScoreUpdatePub: boolean = false): Promise<any> {
     score = Number(score);
     player.score += score;
     this.updateRanking(game);
     player.tmpScore = 0;
-    return this.addRound(game, { player_id: player.id, score });
+    return this.addRound(game, { player_id: player.id, score }, true, skipScoreUpdatePub);
   }
 
+  /**
+   * Compute players ranking and add it to player data. This ranking is then used for ranking display
+   *
+   * @param {GameModel} game
+   */
   public updateRanking(game: GameModel) {
     let players = game.players.slice(0);
 
@@ -254,6 +300,11 @@ export class GameService {
     }
   }
 
+  /**
+   * Used to compute ranking. Players are sorted by score.
+   * TODO: if score is equal, sort by name
+   * @param {GameModel} game
+   */
   public sortPlayersByScore(game: GameModel) {
     return function(a, b) {
       if(game.score_type === 'asc') {
@@ -265,7 +316,18 @@ export class GameService {
     }
   }
 
-  public addRound(game: GameModel, round_data: any, save:boolean = true): Promise<any> {
+  /**
+   * Add round to game
+   * the save flag is used to specify if we want to save rounds to DB. On game loading, we retrieve all rounds from DB
+   * and add it to the game with this function. Thus, we don't want to save rounds in this case.
+   *
+   * @param  {GameModel}    game
+   * @param  {any}          round_data
+   * @param  {boolean}      save               Whether to save round to DB
+   * @param  {boolean}      skipScoreUpdatePub
+   * @return {Promise<any>}
+   */
+  public addRound(game: GameModel, round_data: any, save:boolean = true, skipScoreUpdatePub: boolean = false): Promise<any> {
     return new Promise((resolve, reject) => {
       let prom;
 
@@ -294,15 +356,40 @@ export class GameService {
       }
 
       // Resolve
-      prom.then(resolve)
+      prom.then(() => {
+        if(!skipScoreUpdatePub) {
+          this.publishGameScoreUpdate(game);
+        }
+
+        resolve();
+      })
+      .catch(reject);
+    })
+  }
+
+  /**
+   * Update a round score
+   * @param  {any}          round
+   * @param  {GameModel}    game
+   * @return {Promise<any>}
+   */
+  public updateRound(round: any, game: GameModel): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.db.query('UPDATE rounds SET score = ? WHERE id = ?', [round.score, round.id])
+        .then(() => {
+          this.publishGameScoreUpdate(game);
+          resolve();
+        })
         .catch(reject);
     })
   }
 
-  public updateRound(round: any) {
-    return this.db.query('UPDATE rounds SET score = ? WHERE id = ?', [round.score, round.id]);
-  }
-
+  /**
+   * Delete round from game and save it to DB
+   * @param {GameModel}   game
+   * @param {any}         round
+   * @param {PlayerModel} player
+   */
   public removeRound(game: GameModel, round: any, player: PlayerModel) {
     // Update player score
     player.score -= round.score;
@@ -317,21 +404,24 @@ export class GameService {
     return this.db.query('DELETE FROM rounds where id = ?', [round.id]);
   }
 
-  public getPreviousGamesSettings() {
+  /**
+   * Load previous games with settings
+   *
+   * @return {Promise<Array<GameModel>>} List of previous without duplicates
+   */
+  public getPreviousGamesSettings(): Promise<Array<GameModel>> {
     return new Promise((resolve, reject) => {
       this.db.query(`
-        SELECT DISTINCT
-          start_date,
-          modif_date,
+        SELECT
           name,
           score_type,
           score_input,
           goal,
           goal_type,
-          rounds_limit,
-          rounds_played
+          rounds_limit
         FROM games
         WHERE name IS NOT NULL
+        GROUP BY name
         ORDER BY modif_date DESC, start_date DESC;
       `, [])
       .then(res => {
@@ -348,6 +438,12 @@ export class GameService {
     });
   }
 
+  /**
+   * Remove player from game
+   * @param  {GameModel}    game
+   * @param  {PlayerModel}  player
+   * @return {Promise<any>}
+   */
   public removePlayer(game: GameModel, player: PlayerModel): Promise<any> {
     let index = game.players.indexOf(player);
     game.players.splice(index, 1);
@@ -374,6 +470,13 @@ export class GameService {
       });
   }
 
+  /**
+   * Update number of rounds played in game.
+   * In case of 'per player' score input, each player may have played a different number
+   * of rounds. In this case, we consider the maximum number.
+   *
+   * @param {GameModel} game
+   */
   public updateRoundsPlayed(game: GameModel): void {
     let playersRounds = {};
     let roundsPlayed = 0;
@@ -390,21 +493,34 @@ export class GameService {
     game.rounds_played = roundsPlayed;
   }
 
-/**
- * Set game as ended, save it to DB and publish an event to tell the app the game is over
- * @param  {GameModel}    game
- * @return {Promise<any>}      Resolved when game is saved and event published
- */
+  /**
+   * Set game as ended, save it to DB and publish an event to tell the app the game is over
+   * @param  {GameModel}    game
+   * @return {Promise<any>}      Resolved when game is saved and event published
+   */
   public endGame(game: GameModel): Promise<any> {
     return new Promise((resolve, reject) => {
-      game.endGame();
+      if(game.ended) { // If game has already been ended, don't do anything
+        resolve();
+      }
+      else {
+        game.endGame();
 
-      this.db.query('UPDATE games SET ended = ? WHERE id = ?', [game.ended ? 1 : 0, game.id])
-        .then(() => {
-          this.events.publish('game:ended', game);
-          resolve();
-        })
-        .catch(reject);
+        this.db.query('UPDATE games SET ended = ? WHERE id = ?', [game.ended ? 1 : 0, game.id])
+          .then(() => {
+            this.events.publish(`game:${game.id}:ended`, game);
+            resolve();
+          })
+          .catch(reject);
+      }
     });
+  }
+
+  /**
+   * Publish an event 'score updated'
+   * @param {GameModel} game
+   */
+  public publishGameScoreUpdate(game: GameModel) {
+    this.events.publish(`game:${game.id}:score_updated`, {game});
   }
 }

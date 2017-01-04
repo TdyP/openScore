@@ -91,4 +91,32 @@ export class GameSettings {
     delete this.selectedGame.modif_date;
     this.game = new GameModel(this.selectedGame);
   }
+
+  /**
+   * Return available options for game end.
+   * Options depends on score input type, so we can't simple ion-options in template.
+   *
+   * @return {Array<any>} List of options
+   */
+  public getEndGameOptions(): Array<any> {
+    let options = [
+      {
+        title: this.translateService.instant('settings.end_never'),
+        value: 'none'
+      },
+      {
+        title: this.translateService.instant('settings.end_score'),
+        value: 'score'
+      }
+    ];
+
+    if(this.game.score_input === 'round') {
+      options.push({
+        title: this.translateService.instant('settings.end_rounds'),
+        value: 'rounds'
+      });
+    }
+
+    return options;
+  }
 }

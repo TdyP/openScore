@@ -38,11 +38,21 @@ export class NewRoundModal {
   }
 
   public validate() {
-    for(let key of Object.keys(this.scores)) {
-      let score = this.scores[key];
-      this.gameService.updateScore(this.game, score.player, (score.points || 0))
-        .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
+    let ids = Object.keys(this.scores);
+    let scoresLength = ids.length;
+
+    let promises = [];
+    for(let i = 0; i < scoresLength; i++) {
+      let score = this.scores[ids[i]];
+      promises.push(this.gameService.updateScore(this.game, score.player, (score.points || 0), true));
     }
+
+    Promise.all(promises)
+      .then(() => {
+        this.gameService.publishGameScoreUpdate(this.game);
+      })
+      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
+
     this.viewCtrl.dismiss();
   }
 
