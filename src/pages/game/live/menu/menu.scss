@@ -1,0 +1,12 @@
+.settings-row ion-col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  border-bottom: 1px solid $list-border-color;
+
+  &:not(:last-child) {
+    border-right: 1px solid $list-border-color;
+  }
+}

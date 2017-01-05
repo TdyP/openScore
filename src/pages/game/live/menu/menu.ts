@@ -14,6 +14,7 @@ import { GameService } from '../../../../providers/game/game.service';
 export class LiveMenu {
 
   links: Array<any>;
+  settingsLinks: Array<any>;
 
   constructor(
     private translateService: TranslateService,
@@ -36,16 +37,6 @@ export class LiveMenu {
         title: this.translateService.instant('live.chart'),
         icon: 'trending-up',
         page: GameChart
-      },
-      {
-        title: this.translateService.instant('live.settings'),
-        icon: 'settings',
-        page: GameSettings
-      },
-      {
-        title: this.translateService.instant('live.players'),
-        icon: 'people',
-        page: GamePlayers
       }
     ];
 
@@ -62,6 +53,19 @@ export class LiveMenu {
         }
       );
     }
+
+    this.settingsLinks = [
+      {
+        title: this.translateService.instant('live.settings'),
+        icon: 'settings',
+        page: GameSettings
+      },
+      {
+        title: this.translateService.instant('live.players'),
+        icon: 'people',
+        page: GamePlayers
+      }
+    ];
   }
 
   /**

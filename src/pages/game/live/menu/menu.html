@@ -1,4 +1,9 @@
 <ion-list>
+  <ion-row class="settings-row">
+    <ion-col *ngFor="let link of settingsLinks" (click)="handleMenuClick(link)">
+      <ion-icon name="{{ link.icon }}" item-left></ion-icon>
+    </ion-col>
+  </ion-row>
   <ion-item *ngFor="let link of links" (click)="handleMenuClick(link)">
     <ion-label>{{ link.title }}</ion-label>
     <ion-icon name="{{ link.icon }}" item-left></ion-icon>
