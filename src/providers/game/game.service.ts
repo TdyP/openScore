@@ -302,12 +302,15 @@ export class GameService {
 
   /**
    * Used to compute ranking. Players are sorted by score.
-   * TODO: if score is equal, sort by name
+   * If score are equals, we sort by name
    * @param {GameModel} game
    */
   public sortPlayersByScore(game: GameModel) {
     return function(a, b) {
-      if(game.score_type === 'asc') {
+      if(a.score === b.score) {
+        return a.name.localeCompare(b.name);
+      }
+      else if(game.score_type === 'asc') {
         return b.score - a.score;
       }
       else {
