@@ -29,6 +29,7 @@
           <div class="name">
             <ion-icon name="medal" class="medal" item-left [hidden]="!player.rank || player.rank > 3"></ion-icon>
             {{ player.name }}
+            <ion-icon name="arrow-dropleft" class="last_round" item-right [hidden]="game.score_input !== 'player' || !isLastRoundPlayer(player)"></ion-icon>
           </div>
           <div class="score" (press)="openPlayerHistory(player)">
             {{player.score}}

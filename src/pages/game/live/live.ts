@@ -207,4 +207,16 @@ export class GameLive {
     }
   }
 
+  /**
+   * Is this player the last who played?
+   *
+   * @param  {PlayerModel} player
+   * @return {boolean}
+   */
+  public isLastRoundPlayer(player: PlayerModel): boolean {
+    let lastRound = this.game.rounds.slice(-1)[0];
+
+    return lastRound.player_id === player.id;
+  }
+
 }
