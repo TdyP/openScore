@@ -88,6 +88,36 @@ export class GameService {
   }
 
   /**
+   * Retrieve games played by given player
+   *
+   * @param  {PlayerModel} player
+   * @return {Promise<Array<GameModel>>}
+   */
+  public getGamesByPlayer(player: PlayerModel): Promise<Array<GameModel>> {
+    return new Promise((resolve, reject) => {
+      this.db.query(
+        `
+          SELECT * FROM games g
+          LEFT JOIN participate p on g.id = p.game_id
+          WHERE p.player_id = ?
+        `,
+        [player.id]
+      )
+      .then(res => {
+        var len = res.rows.length;
+        let games = [];
+        for (var i = 0; i < len; i++)
+        {
+          games.push(new GameModel(res.rows.item(i)));
+        }
+
+        resolve(games);
+      })
+      .catch(reject);
+    });
+  }
+
+  /**
    * Load game players and rounds
    *
    * @param {GameModel} game

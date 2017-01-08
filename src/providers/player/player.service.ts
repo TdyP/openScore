@@ -7,9 +7,10 @@ import { DbService } from '../db.service';
 @Injectable()
 export class PlayerService {
 
-  constructor(private db: DbService, private translateService: TranslateService) {
-
-  }
+  constructor(
+    private db: DbService,
+    private translateService: TranslateService
+  ) {}
 
   public deletePlayer(player: PlayerModel): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -75,17 +76,6 @@ export class PlayerService {
       }, reject)
       .catch(reject);
     });
-  }
-
-  public loadPlayerStats(player: PlayerModel): Promise<PlayerModel> {
-    return new Promise((resolve, reject) => {
-      this.db.query('SELECT count(*) AS count FROM participate WHERE player_id = ? group by player_id',[player.id]) // Get number of games played
-      .then(res => {
-        player.stats.games_played = res.rows.item(0).count;
-        resolve(player);
-      })
-      .catch(reject);
-    })
   }
 
   public getDefaultName(index: number) {

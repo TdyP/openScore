@@ -1,8 +1,5 @@
-import { Injectable } from '@angular/core';
-
 import { PlayerModel } from '../player/player.model';
 
-@Injectable()
 export class GameModel {
 
   id: number;
@@ -86,5 +83,9 @@ export class GameModel {
 
   public endGame() {
     this.ended = true;
+  }
+
+  public isEnded() {
+    return this.ended;
   }
 }

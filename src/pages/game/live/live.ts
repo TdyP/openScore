@@ -216,7 +216,7 @@ export class GameLive {
   public isLastRoundPlayer(player: PlayerModel): boolean {
     let lastRound = this.game.rounds.slice(-1)[0];
 
-    return lastRound.player_id === player.id;
+    return typeof lastRound !== 'undefined' && lastRound.player_id === player.id;
   }
 
 }

@@ -3,8 +3,37 @@
     <ion-title>
       {{ player.name }}
     </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="editPlayer()">
+        <ion-icon name="create"></ion-icon>
+      </button>
+      <button ion-button (click)="deletePlayer()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  {{ 'player_view.games_played' | translate : {count: player.stats.games_played} }}
+  <ion-list [hidden]="!ready">
+    <ion-item>
+      <ion-icon name="copy" item-left></ion-icon>
+      <ion-label>{{ 'player_view.games_played' | translate : {count: player.stats.games_played} }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="flag" item-left></ion-icon>
+      <ion-label>{{ 'player_view.games_ended' | translate : {count: player.stats.games_ended} }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="trophy" item-left></ion-icon>
+      <ion-label>{{ 'player_view.wins' | translate : {count: player.stats.wins, percent: player.stats.win_rate} }}</ion-label>
+    </ion-item>
+    <ion-item [hidden]="!player.stats.wins">
+      <ion-icon name="heart" item-left></ion-icon>
+      <ion-label>{{ 'player_view.favorite_game' | translate : {game_name: player.stats.fav_game, count: player.stats.fav_game_count} }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="clock" item-left></ion-icon>
+      <ion-label>{{ 'player_view.playing_time' | translate : {time: player.stats.playing_time} }}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

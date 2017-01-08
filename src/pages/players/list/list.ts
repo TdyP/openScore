@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ActionSheetController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ActionSheetController, LoadingController } from 'ionic-angular';
 import { TranslateService } from "ng2-translate/ng2-translate";
 
 import { PlayerService } from '../../../providers/player/player.service';
@@ -13,12 +13,13 @@ export class PlayersList {
   players: any;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public alertCtrl: AlertController,
-    public actionSheetCtrl: ActionSheetController,
-    public translateService: TranslateService,
-    public playerService: PlayerService
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private alertCtrl: AlertController,
+    private actionSheetCtrl: ActionSheetController,
+    private loadingCtrl: LoadingController,
+    private translateService: TranslateService,
+    private playerService: PlayerService
   ) {}
 
   /**
@@ -40,7 +41,12 @@ export class PlayersList {
    * @param {PlayerModel} player
    */
   public viewPlayer(player: PlayerModel) {
-    this.navCtrl.push(PlayersView, {player});
+    var loading = this.loadingCtrl.create({
+      content: this.translateService.instant('loading')
+    });
+    loading.present();
+
+    this.navCtrl.push(PlayersView, {player, loading});
   }
 
   public showActions(player: PlayerModel) {
@@ -79,52 +85,5 @@ export class PlayersList {
       ]
     });
     actionSheet.present();
-  }
-
-  public editPlayer(player: PlayerModel) {
-    this.alertCtrl.create({
-      title: this.translateService.instant('edit') + ' ' + player.name,
-      inputs: [
-        {
-          name: 'name',
-          type: 'text',
-          value: player.name
-        },
-      ],
-      buttons: [
-        {
-          text: this.translateService.instant('cancel')
-        },
-        {
-          text: 'OK',
-          handler: (data) => {
-            //TODO: validate name is not empty
-            player.name = data.name;
-            this.playerService.save(player);
-          }
-        }
-      ]
-    })
-    .present();
-  }
-
-  public deletePlayer(player: PlayerModel) {
-    this.alertCtrl.create({
-      title: this.translateService.instant('players.remove_confirm_title'),
-      buttons: [
-        {
-          text: this.translateService.instant('cancel')
-        },
-        {
-          text: 'OK',
-          handler: () => {
-            this.playerService.deletePlayer(player);
-            let index = this.players.indexOf(player);
-            this.players.splice(index, 1);
-          }
-        }
-      ]
-    })
-    .present();
   }
 }

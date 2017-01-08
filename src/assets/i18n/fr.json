@@ -68,7 +68,11 @@
 
     },
     "player_view": {
-        "games_played": "{{ count }} parties jouées"
+        "games_played": "Parties jouées : {{ count }}",
+        "games_ended": "Parties terminées : {{ count }}",
+        "favorite_game": "Jeu préféré : {{ game_name }} ({{ count }} victoires)",
+        "wins": "Victoires : {{ count }} ({{ percent }}%)",
+        "playing_time": "Temps de jeu : {{ time }}"
     },
     "history": {
         "remove_confirm_title": "Êtes-vous sûr de vouloir supprimer ce score?",

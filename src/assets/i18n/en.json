@@ -67,7 +67,11 @@
         "new_round": "New round"
     },
     "player_view": {
-        "games_played": "{{ count }} games played"
+        "games_played": "Games played : {{ count }}",
+        "games_ended": "Games ended : {{ count }}",
+        "favorite_game": "Favorite game : {{ game_name }} ({{ count }} victories)",
+        "wins": "Victories: {{ count }} ({{ percent }}%)",
+        "playing_time": "Playing time : {{ time }}"
     },
     "history": {
         "remove_confirm_title": "Do you really want to delete this score?",
