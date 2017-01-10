@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform, Events } from 'ionic-angular';
+import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform, Events, LoadingController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { ErrorService } from '../../../providers/error.service';
@@ -8,6 +8,7 @@ import { GameModel } from '../../../providers/game/game.model';
 import { GameService } from '../../../providers/game/game.service';
 import { PlayerModel } from '../../../providers/player/player.model';
 
+import { HomePage } from '../../home/home';
 import { LiveMenu } from './menu/menu';
 import { GameHistory } from './history/history';
 import { NewRoundModal } from './newRound/newRound';
@@ -31,6 +32,7 @@ export class GameLive {
     private popoverCtrl: PopoverController,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
     private events: Events,
     private gameService: GameService,
     private errorServ: ErrorService,
@@ -47,8 +49,10 @@ export class GameLive {
       loading.dismiss();
     }
 
+    // Add game id game ID in events name to scope those events to this particular view
     events.subscribe(`game:${this.game.id}:ended`, () => this.handleGameEnded());
     events.subscribe(`game:${this.game.id}:score_updated`, () => this.checkGameEnd());
+    events.subscribe(`game:${this.game.id}:new_game`, () => this.startNewGame());
   }
 
   public ngOnInit() {
@@ -217,6 +221,20 @@ export class GameLive {
     let lastRound = this.game.rounds.slice(-1)[0];
 
     return typeof lastRound !== 'undefined' && lastRound.player_id === player.id;
+  }
+
+  public startNewGame() {
+    var loading = this.loadingCtrl.create({
+      content: this.translateService.instant('loading')
+    });
+    loading.present();
+
+    this.gameService.duplicateGame(this.game)
+      .then((newGame) => {
+        // Game is duplicate, move view to this new game
+        this.navCtrl.setPages([HomePage, {page: GameLive, params: {game: newGame, loading}}]);
+      })
+      .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
   }
 
 }

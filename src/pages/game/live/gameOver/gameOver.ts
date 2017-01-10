@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController, Events } from 'ionic-angular';
 
 import { GameModel } from '../../../../providers/game/game.model';
 import { PlayerModel } from '../../../../providers/player/player.model';
@@ -17,6 +17,7 @@ export class GameOverModal {
   constructor(
     private navParams: NavParams,
     private viewCtrl: ViewController,
+    private events: Events,
     private sortPipe: SortByScorePipe
   ) {
     this.game = this.navParams.get('game');
@@ -27,6 +28,11 @@ export class GameOverModal {
 
   public dismiss() {
     this.viewCtrl.dismiss();
+  }
+
+  public startNewGame() {
+    this.events.publish(`game:${this.game.id}:new_game`, {game: this.game});
+    this.dismiss();
   }
 
 }

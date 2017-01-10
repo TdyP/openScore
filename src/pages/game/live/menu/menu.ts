@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController, App } from 'ionic-angular';
+import { NavController, NavParams, ViewController, App, Events, LoadingController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { HomePage } from '../../../home/home';
 import { GameHistory } from '../history/history';
 import { GameChart } from '../chart/chart';
+import { GameLive } from '../live';
 import { GameSettings } from '../../settings/settings';
 import { GamePlayers } from '../../players/players';
 import { GameService } from '../../../../providers/game/game.service';
+import { GameModel } from '../../../../providers/game/game.model';
+import { ErrorService } from '../../../../providers/error.service';
 
 @Component({
   templateUrl: 'menu.html'
@@ -18,11 +22,14 @@ export class LiveMenu {
 
   constructor(
     private translateService: TranslateService,
-    private gameService: GameService,
     private params: NavParams,
     private navCtrl: NavController,
     private viewCtrl: ViewController,
-    private app: App
+    private loadingCtrl: LoadingController,
+    private events: Events,
+    private app: App,
+    private gameService: GameService,
+    private errorServ: ErrorService
   ) {
     this.translateService = translateService;
     let game = this.params.get('game');
@@ -48,6 +55,19 @@ export class LiveMenu {
           action: () => {
             if(confirm(this.translateService.instant('live.end_game_confirm'))) {
               this.gameService.endGame(game);
+            }
+          }
+        }
+      );
+    }
+    else {
+      this.links.push(
+        {
+          title: this.translateService.instant('live.new_game'),
+          icon: 'repeat',
+          action: () => {
+            if(confirm(this.translateService.instant('live.new_game_confirm'))) {
+              this.startNewGame(game);
             }
           }
         }
@@ -83,5 +103,9 @@ export class LiveMenu {
     else if(menuElem.action) {
       menuElem.action();
     }
+  }
+
+  public startNewGame(game: GameModel) {
+    this.events.publish(`game:${game.id}:new_game`, {game});
   }
 }

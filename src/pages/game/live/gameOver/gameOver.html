@@ -11,11 +11,15 @@
     <div class="winner_name">{{ winner.name }}</div>
     <div class="winner_score">{{ "live.winner_score" | translate:{score: winner.score} }}</div>
   </div>
+  <button class="btn_play_again" (click)="startNewGame()" ion-button small icon-left clear>
+    <ion-icon name="repeat"></ion-icon>
+    {{ "live.new_game" | translate }}
+  </button>
 </ion-content>
 <ion-footer>
   <ion-buttons end>
     <button ion-button clear light (click)="dismiss()">
-      {{ "OK" | translate }}
+      {{ "close" | translate }}
     </button>
   </ion-buttons>
 </ion-footer>

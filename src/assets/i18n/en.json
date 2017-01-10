@@ -3,6 +3,7 @@
     "cancel" : "Cancel",
     "edit" : "Edit",
     "ok" : "OK",
+    "close" : "Close",
     "next" : "Next",
     "validate" : "Validate",
     "delete" : "Delete",
@@ -64,7 +65,9 @@
         "players": "Players",
         "started_at" : "Game started",
         "rounds_played" : "{{ rounds }} rounds played",
-        "new_round": "New round"
+        "new_round": "New round",
+        "new_game": "New game",
+        "new_game_confirm": "Do you really want to start a new game?"
     },
     "player_view": {
         "games_played": "Games played : {{ count }}",

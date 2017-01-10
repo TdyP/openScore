@@ -48,42 +48,4 @@ export class PlayersList {
 
     this.navCtrl.push(PlayersView, {player, loading});
   }
-
-  public showActions(player: PlayerModel) {
-    let actionSheet = this.actionSheetCtrl.create({
-      buttons: [
-        {
-          text: this.translateService.instant('edit') + ' ' + player.name,
-          icon: 'create',
-          handler: () => {
-            actionSheet.dismiss()
-            .then(() => {
-              this.editPlayer(player);
-            });
-
-            return false;
-          }
-        },
-        {
-          text: this.translateService.instant('delete') + ' ' + player.name,
-          role: 'destructive',
-          icon: 'trash',
-          handler: () => {
-            actionSheet.dismiss()
-            .then(() => {
-              this.deletePlayer(player);
-            });
-
-            return false;
-          }
-        },
-        {
-          text: this.translateService.instant('cancel'),
-          role: 'cancel',
-          icon: 'close'
-        }
-      ]
-    });
-    actionSheet.present();
-  }
 }

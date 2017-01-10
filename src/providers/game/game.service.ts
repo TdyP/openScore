@@ -556,4 +556,37 @@ export class GameService {
   public publishGameScoreUpdate(game: GameModel) {
     this.events.publish(`game:${game.id}:score_updated`, {game});
   }
+
+  /**
+   * Make a copy of the game with exact same settings and players but no rounds played.
+   *
+   * @param  {GameModel}          game
+   * @return {Promise<GameModel>}      The newly created game
+   */
+  public duplicateGame(game: GameModel): Promise<GameModel> {
+    return new Promise((resolve, reject) => {
+      let newGame = new GameModel(game);
+
+      // Reset game specific fields
+      delete newGame.id;
+      delete newGame.start_date;
+      delete newGame.modif_date;
+      newGame.favorite = false;
+      newGame.ended = false;
+      newGame.rounds = [];
+      newGame.rounds_count = 0;
+      newGame.rounds_played = 0;
+
+      // Reset players scores and ranking
+      for(let player of newGame.players) {
+        player.score = 0;
+        player.rank = 0;
+      }
+
+      this.saveGame(newGame)
+        .then(() => this.saveGamePlayers(newGame))
+        .then(() => resolve(newGame))
+        .catch(reject);
+    });
+  }
 }

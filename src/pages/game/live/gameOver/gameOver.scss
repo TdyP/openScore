@@ -23,21 +23,31 @@
 }
 
 page-game-over {
-  .winner_wrapper {
-    margin-top: 50%;
-    text-align: center;
-    font-size: 1.8rem;
+  .scroll-content {
+    overflow: hidden;
+    .winner_wrapper {
+      margin-top: 50%;
+      text-align: center;
+      font-size: 1.8rem;
 
-    .winner_name {
-      font-size: 4rem;
-      color: #FFD700;
-      animation-duration: 1.5s;
-      animation-name: tada;
+      .winner_name {
+        font-size: 4rem;
+        color: #FFD700;
+        animation-duration: 1.5s;
+        animation-name: tada;
+      }
+
+      .winner_score {
+        font-size: 1.5rem;
+        color: #999999;
+      }
     }
 
-    .winner_score {
-      font-size: 1.5rem;
-      color: #999999;
+    .btn_play_again {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }
