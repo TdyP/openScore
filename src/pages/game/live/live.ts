@@ -50,8 +50,14 @@ export class GameLive {
     }
 
     // Add game id game ID in events name to scope those events to this particular view
+    // Always unsubscribe in a first time to make sure we're not subscribed multiple times
+    events.unsubscribe(`game:${this.game.id}:ended`);
     events.subscribe(`game:${this.game.id}:ended`, () => this.handleGameEnded());
+
+    events.unsubscribe(`game:${this.game.id}:score_updated`);
     events.subscribe(`game:${this.game.id}:score_updated`, () => this.checkGameEnd());
+
+    events.unsubscribe(`game:${this.game.id}:new_game`);
     events.subscribe(`game:${this.game.id}:new_game`, () => this.startNewGame());
   }
 
