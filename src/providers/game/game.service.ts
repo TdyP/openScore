@@ -581,6 +581,10 @@ export class GameService {
       for(let player of newGame.players) {
         player.score = 0;
         player.rank = 0;
+
+        if(!player.custom_name) {
+          player.name = '';
+        }
       }
 
       this.saveGame(newGame)
