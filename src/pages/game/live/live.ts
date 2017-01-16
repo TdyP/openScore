@@ -1,6 +1,6 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform, Events, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform, Events, LoadingController, Content } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { ErrorService } from '../../../providers/error.service';
@@ -24,6 +24,8 @@ export class GameLive {
   pendingScore: any;
   tmpScoreDelay: number = 5000;
   playerBlockHeight: any;
+
+  @ViewChild(Content) content: Content;
 
   constructor(
     private navCtrl: NavController,
@@ -70,7 +72,13 @@ export class GameLive {
     }.bind(this), false);
   }
 
+  // Compute player block height
   public ionViewWillEnter() {
+    this.setPlayerBlockHeight(); // Init height when view rendering is over
+  }
+
+  // We call on both events on load to avoid any flickering and make sure it's always up-to-date
+  public ionViewDidEnter() {
     this.setPlayerBlockHeight(); // Init height when view rendering is over
   }
 
@@ -164,11 +172,15 @@ export class GameLive {
    * and divide it by the number of rows: 1 row per player in portrait, and 2 players per row in landscape
    */
   public setPlayerBlockHeight() {
+    this.content.resize(); // Force scroll-content margin to be calculated again. It should change if the footer disappear for example
     let mql = window.matchMedia("(orientation: portrait)");
     let isPortrait = mql.matches;
     let headerHeight = document.querySelector('page-game-live ion-header').clientHeight;
     let contentHeight = document.querySelector('page-game-live ion-content').clientHeight
-    let footerHeight = document.querySelector('page-game-live ion-footer').clientHeight + 4; // Add arbitrary extra margin to avoid content stuck to footer
+
+    let footer = document.querySelector('page-game-live ion-footer');
+    let footerHeight = footer !== null ? footer.clientHeight + 4 : 0; // Add arbitrary extra margin to avoid content stuck to footer
+
     let availableHeight = contentHeight - headerHeight - footerHeight   ;
     let rowsCount = isPortrait ? this.game.players.length : Math.round(this.game.players.length / 2);
     let elemMargin = window.getComputedStyle(document.querySelector('page-game-live .scroll-content .players .player_wrapper')).margin;
@@ -187,7 +199,8 @@ export class GameLive {
         enableBackdropDismiss: true
       }
     )
-    .present();
+    .present()
+    .then(() => this.setPlayerBlockHeight());
   }
 
   /**

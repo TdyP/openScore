@@ -91,7 +91,9 @@ export class PlayersView {
               }
 
               // To get game duration, we take the difference between game creation and last round creation
-              playingTimeSeconds += (game.rounds.slice(-1)[0].created_at - game.createdAt.getTime()) / 1000; // Game duration in seconds
+              if(game.rounds.length) {
+                playingTimeSeconds += (game.rounds.slice(-1)[0].created_at - game.createdAt.getTime()) / 1000; // Game duration in seconds
+              }
 
               resolve();
             })

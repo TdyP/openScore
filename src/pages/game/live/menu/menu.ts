@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, App, Events, LoadingController } from 'ionic-angular';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { HomePage } from '../../../home/home';
 import { GameHistory } from '../history/history';
 import { GameChart } from '../chart/chart';
-import { GameLive } from '../live';
 import { GameSettings } from '../../settings/settings';
 import { GamePlayers } from '../../players/players';
 import { GameService } from '../../../../providers/game/game.service';
@@ -95,14 +93,15 @@ export class LiveMenu {
    * @param {any} menuElem Menu element defined in constructor above
    */
   public handleMenuClick(menuElem) {
-    this.viewCtrl.dismiss();
-
-    if(menuElem.page) {
-      this.app.getRootNav().push(menuElem.page, {game: this.params.get('game'), fromGameMenu: true});
-    }
-    else if(menuElem.action) {
-      menuElem.action();
-    }
+    this.viewCtrl.dismiss()
+    .then(() => {
+      if(menuElem.page) {
+        this.app.getRootNav().push(menuElem.page, {game: this.params.get('game'), fromGameMenu: true});
+      }
+      else if(menuElem.action) {
+        menuElem.action();
+      }
+    });
   }
 
   public startNewGame(game: GameModel) {

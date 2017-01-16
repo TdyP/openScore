@@ -44,7 +44,7 @@
     </div>
   </div>
 </ion-content>
-<ion-footer [hidden]="game.score_input !== 'round' || game.ended">
+<ion-footer *ngIf="game.score_input === 'round' && !game.ended">
   <ion-buttons end>
     <button ion-button clear light (click)="newRound()">
       <ion-icon name="add-circle" item-left></ion-icon>&nbsp;
