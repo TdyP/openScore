@@ -569,9 +569,9 @@ export class GameService {
 
       // Reset game specific fields
       delete newGame.id;
-      delete newGame.start_date;
-      delete newGame.modif_date;
       newGame.favorite = false;
+      newGame.modif_date = Date.now();
+      newGame.start_date = Date.now();
       newGame.ended = false;
       newGame.rounds = [];
       newGame.rounds_count = 0;
