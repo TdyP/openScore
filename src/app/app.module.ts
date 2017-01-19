@@ -4,7 +4,7 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 import { SQLite } from 'ionic-native';
 import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate/ng2-translate';
 import { OpenScore } from './app.component';
-import { ChartsModule } from "ng2-charts/components/charts/charts";
+import { ChartsModule } from "ng2-charts";
 
 /** Providers */
 import { DbService } from '../providers/db.service';
