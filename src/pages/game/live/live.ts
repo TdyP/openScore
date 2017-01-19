@@ -146,7 +146,7 @@ export class GameLive {
   }
 
   public showMenu(ev) {
-    let popover = this.popoverCtrl.create(LiveMenu, {game: this.game});
+    let popover = this.popoverCtrl.create(LiveMenu, {game: this.game}, {cssClass:"live-menu"});
     popover.present({ev});
   }
 

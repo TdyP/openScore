@@ -1,3 +1,15 @@
+/**
+ * Temporary fix for popover not displayed after virtual keyboard showed up
+ * Should be fixed in RC6
+ */
+ion-popover.home-menu {
+  .popover-content {
+    left: auto !important;
+    right: 12px;
+    height: 115px;
+  }
+}
+
 page-home {
   ion-navbar {
     text-align: center;

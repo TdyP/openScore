@@ -6,6 +6,18 @@ $colorWidth: 7px;
 $playerWrapperMargin: 5px;
 $gameLiveFooterHeight: 44px;
 
+/**
+ * Temporary fix for popover not displayed after virtual keyboard showed up
+ * Should be fixed in RC6
+ */
+ion-popover.live-menu {
+  .popover-content {
+    left: auto !important;
+    right: 12px;
+    height: 205px;
+  }
+}
+
 page-game-live {
   .game_details {
     @media (orientation: landscape) {

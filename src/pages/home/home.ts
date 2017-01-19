@@ -124,7 +124,7 @@ export class HomePage {
   }
 
   public showMenu(ev) {
-    let popover = this.popoverCtrl.create(HomeMenu);
+    let popover = this.popoverCtrl.create(HomeMenu, {}, {cssClass:"home-menu"});
     popover.present({ev});
   }
 }
