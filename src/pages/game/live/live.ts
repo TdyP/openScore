@@ -268,7 +268,10 @@ export class GameLive {
     this.gameService.duplicateGame(this.game)
       .then((newGame) => {
         // Game is duplicate, move view to this new game
-        this.navCtrl.setPages([HomePage, {page: GameLive, params: {game: newGame, loading}}]);
+        this.navCtrl.setPages([
+          {page: HomePage},
+          {page: GameLive, params: {game: newGame, loading}}
+        ]);
       })
       .catch(err => this.errorServ.handle(err, this.translateService.instant('errors.default')));
   }
