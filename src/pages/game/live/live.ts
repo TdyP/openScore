@@ -24,6 +24,7 @@ export class GameLive {
   pendingScore: any;
   tmpScoreDelay: number = 5000;
   playerBlockHeight: any;
+  resizeEventHandler: EventListener;
 
   @ViewChild(Content) content: Content;
 
@@ -55,22 +56,27 @@ export class GameLive {
     events.subscribe(`game:${this.game.id}:ended`, () => this.handleGameEnded());
     events.subscribe(`game:${this.game.id}:score_updated`, () => this.checkGameEnd());
     events.subscribe(`game:${this.game.id}:new_game`, () => this.startNewGame());
-  }
 
-  public ionViewWillUnload() {
-    // Cancel all events listening when view is unloaded
-    this.events.unsubscribe(`game:${this.game.id}:ended`);
-    this.events.unsubscribe(`game:${this.game.id}:score_updated`);
-    this.events.unsubscribe(`game:${this.game.id}:new_game`);
+    this.resizeEventHandler = this._initResizeHandler();
   }
 
   public ngOnInit() {
     // Watch for orientation change to update player block height
-    window.addEventListener("resize", function() {
-      this.zone.run(() => {
-        this.setPlayerBlockHeight();
-      })
-    }.bind(this), false);
+    window.addEventListener("resize", this.resizeEventHandler, false);
+  }
+
+  /**
+   * Return handler used on resize event.
+   * Using curly function to avoid using bind(this) when adding listener,
+   * and making removeEventListener to work properly.
+   */
+  private _initResizeHandler() {
+      let self = this;
+      return function() {
+        self.zone.run(() => {
+          self.setPlayerBlockHeight();
+        });
+      }
   }
 
   // Compute player block height
@@ -81,6 +87,16 @@ export class GameLive {
   // We call on both events on load to avoid any flickering and make sure it's always up-to-date
   public ionViewDidEnter() {
     this.setPlayerBlockHeight(); // Init height when view rendering is over
+  }
+
+  public ionViewWillUnload() {
+    // Cancel all events listening when view is unloaded
+    this.events.unsubscribe(`game:${this.game.id}:ended`);
+    this.events.unsubscribe(`game:${this.game.id}:score_updated`);
+    this.events.unsubscribe(`game:${this.game.id}:new_game`);
+
+    // Remove resize listener
+    window.removeEventListener("resize", this.resizeEventHandler, false);
   }
 
   public updateTmpScore(player: PlayerModel, score: number) {
