@@ -1,31 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
-import { SQLite } from 'ionic-native';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { ErrorService } from './error.service';
-import { TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class DbService {
 
-  public db: SQLite;
+  public db: SQLiteObject;
   private isReady: boolean = false;
   private currentVersion: number = 3;
 
   constructor(
-    db: SQLite,
+    private sqlite: SQLite,
     public events: Events,
     private errorServ: ErrorService,
     private translateService: TranslateService
-  ) {
-    this.db = new SQLite();
-  }
+  ) {}
 
   public init() {
-    this.db.openDatabase({
+    this.sqlite.create({
       name: 'openscore.db',
       location: 'default' // the location field is required
     })
-    .then(() => {
+    .then((db: SQLiteObject) => {
+      this.db = db;
       return this.checkDbVersion();
     })
     .then(() => {

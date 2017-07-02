@@ -1,7 +1,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavController, NavParams, AlertController, PopoverController, ModalController, Platform, Events, LoadingController, Content } from 'ionic-angular';
-import { TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 import { ErrorService } from '../../../providers/error.service';
 import { GameModel } from '../../../providers/game/game.model';

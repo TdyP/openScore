@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
-import { TranslateService } from 'ng2-translate/ng2-translate';
+import { StatusBar } from '@ionic-native/status-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 import { HomePage } from '../pages/home/home';
 import { DbService } from '../providers/db.service';
@@ -15,13 +15,14 @@ export class OpenScore {
   constructor(
     public platform: Platform,
     public dbService: DbService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public statusBar: StatusBar
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       dbService.init();
-      StatusBar.styleDefault();
+      statusBar.styleDefault();
     });
 
     translate.addLangs(["en", "fr"]);

@@ -1,8 +1,11 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { Http } from "@angular/http";
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule, Http } from "@angular/http";
 import { IonicApp, IonicModule } from 'ionic-angular';
-import { SQLite } from 'ionic-native';
-import { TranslateModule, TranslateStaticLoader, TranslateLoader } from 'ng2-translate/ng2-translate';
+import { SQLite } from '@ionic-native/sqlite';
+import { StatusBar } from '@ionic-native/status-bar';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { OpenScore } from './app.component';
 import { ChartsModule } from "ng2-charts";
 
@@ -32,7 +35,7 @@ import { AvailablePlayersPipe } from '../pipes/availablePlayers.pipe';
 import { SortByScorePipe } from '../pipes/sortByScore.pipe';
 
 export function translateLoaderFactory(http: any) {
-  return new TranslateStaticLoader(http, './assets/i18n', '.json');
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 export function localeServiceFactory(localeService: any) {
@@ -60,12 +63,16 @@ export function localeServiceFactory(localeService: any) {
     SortByScorePipe
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     ChartsModule,
     IonicModule.forRoot(OpenScore),
     TranslateModule.forRoot({
-      provide: TranslateLoader,
-      useFactory: translateLoaderFactory,
-      deps: [Http]
+      loader: {
+        provide: TranslateLoader,
+        useFactory: translateLoaderFactory,
+        deps: [Http]
+      }
     })
   ],
   bootstrap: [IonicApp],
@@ -87,6 +94,8 @@ export function localeServiceFactory(localeService: any) {
   ],
   providers: [
     SQLite,
+    StatusBar,
+    TranslateService,
     DbService,
     LocaleService,
     ErrorService,

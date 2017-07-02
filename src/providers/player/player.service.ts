@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from "ng2-translate/ng2-translate";
+import { TranslateService } from "@ngx-translate/core";
 
 import { PlayerModel } from './player.model';
 import { DbService } from '../db.service';

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController  } from 'ionic-angular';
-import { TranslateService } from "ng2-translate/ng2-translate";
+import { TranslateService } from "@ngx-translate/core";
 
 import { ErrorService } from '../../../providers/error.service';
 import { GameService } from '../../../providers/game/game.service';
