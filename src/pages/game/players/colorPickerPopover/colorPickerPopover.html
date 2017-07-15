@@ -1,0 +1,10 @@
+<ion-grid>
+  <ion-row wrap>
+    <ion-col
+     *ngFor="let color of this.availableColors; index as i" col-auto
+     (click)="setColor(color)"
+    >
+      <div class="available-color" [style.background-color]="color"></div>
+    </ion-col>
+  </ion-row>
+</ion-grid>

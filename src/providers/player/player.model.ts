@@ -11,6 +11,20 @@ export class PlayerModel {
   tmpScore: number = 0; // Used to delay the score saving
   rank: number = 0;
   stats: any;
+  availableColors: [string] = [
+    '#FF0000',
+    '#0000FF',
+    '#00FF00',
+    '#ffa500',
+    '#ffff00',
+    '#000000',
+    '#f70cf4',
+    '#0df8df',
+    '#830482',
+    '#00c6ff',
+    '#ffc0cb',
+    '#8e8e8e'
+  ];
 
   constructor(data ?: any, playerIndex ?: number) {
     if (!!data) {
@@ -33,23 +47,9 @@ export class PlayerModel {
    */
   public getRandomColor(playerIndex) {
     let color;
-    let definedColors = [
-      '#FF0000',
-      '#0000FF',
-      '#00FF00',
-      '#ffa500',
-      '#ffff00',
-      '#000000',
-      '#f70cf4',
-      '#0df8df',
-      '#830482',
-      '#00c6ff',
-      '#ffc0cb',
-      '#8e8e8e'
-    ];
 
-    if(playerIndex <= definedColors.length) {
-      color = definedColors[playerIndex];
+    if(playerIndex <= this.availableColors.length) {
+      color = this.availableColors[playerIndex];
     }
     else {
       // Generate as distincts colors as possible on the whole hue range.
@@ -61,6 +61,15 @@ export class PlayerModel {
     }
 
     return color;
+  }
+
+  /**
+   * Return all available colors
+   *
+   * @return array  Array of hexadecimal colors
+   */
+  public getAvailableColors(): [string] {
+    return this.availableColors;
   }
 
 }

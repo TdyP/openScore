@@ -84,3 +84,9 @@ ion-content {
 .focus-outline :focus {
   outline: none;
 }
+
+.backdropOpacityPopover {
+  ion-backdrop {
+    opacity: 0.5;
+  }
+}

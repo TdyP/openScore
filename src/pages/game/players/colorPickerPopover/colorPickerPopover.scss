@@ -1,0 +1,31 @@
+.color-picker-popover-wrapper {
+  .popover-content {
+    background: none;
+    box-shadow: none;
+  }
+}
+color-picker-popover {
+
+  ion-grid.grid {
+    margin: 0;
+    padding: 0;
+
+    ion-row {
+      justify-content: flex-start;
+      width: 200px;
+
+      ion-col.col {
+        padding-top: 0;
+        padding-left: 0;
+        margin-left: 0;
+
+        .available-color {
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+          border: 1px solid #AAAAAA;
+        }
+      }
+    }
+  }
+}

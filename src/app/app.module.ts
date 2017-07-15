@@ -30,6 +30,7 @@ import { GameChart } from '../pages/game/live/chart/chart';
 import { GameHistory } from '../pages/game/live/history/history';
 import { PlayersList } from '../pages/players/list/list';
 import { PlayersView } from '../pages/players/view/view';
+import { ColorPickerPopover } from '../pages/game/players/colorPickerPopover/colorPickerPopover';
 import { SortGamesPipe } from '../pipes/sortGames.pipe';
 import { AvailablePlayersPipe } from '../pipes/availablePlayers.pipe';
 import { SortByScorePipe } from '../pipes/sortByScore.pipe';
@@ -58,6 +59,7 @@ export function localeServiceFactory(localeService: any) {
     GameHistory,
     PlayersList,
     PlayersView,
+    ColorPickerPopover,
     SortGamesPipe,
     AvailablePlayersPipe,
     SortByScorePipe
@@ -90,7 +92,8 @@ export function localeServiceFactory(localeService: any) {
     GameChart,
     GameHistory,
     PlayersList,
-    PlayersView
+    PlayersView,
+    ColorPickerPopover
   ],
   providers: [
     SQLite,

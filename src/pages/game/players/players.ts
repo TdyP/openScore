@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, PopoverController, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import _ from 'lodash';
 
@@ -9,6 +9,7 @@ import { GameService } from '../../../providers/game/game.service';
 import { PlayerService } from '../../../providers/player/player.service';
 
 import { GameLive } from '../live/live';
+import { ColorPickerPopover } from './colorPickerPopover/colorPickerPopover';
 
 @Component({
   selector: 'page-game-players',
@@ -26,6 +27,7 @@ export class GamePlayers {
     private navCtrl: NavController,
     private navParams: NavParams,
     private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
     private loadingCtrl: LoadingController,
     private translateService: TranslateService,
     private playerService: PlayerService,
@@ -191,6 +193,21 @@ export class GamePlayers {
 
   public getDefaultName(index) {
     return this.playerService.getDefaultName(index);
+  }
+
+  public openColorPickerPopover(ev, player) {
+    let popover = this.popoverCtrl.create(ColorPickerPopover,
+      {
+        player
+      },
+      {
+        showBackdrop: true,
+        enableBackdropDismiss: true,
+        cssClass: 'backdropOpacityPopover color-picker-popover-wrapper'
+      }
+    );
+
+    popover.present({ev});
   }
 
   private updatePlayersColors() {

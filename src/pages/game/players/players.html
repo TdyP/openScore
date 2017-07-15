@@ -18,7 +18,7 @@
   </button>
   <ion-list class="players_list">
     <ion-item *ngFor="let player of game.players; let i = index">
-      <span class="player_color" [style.background-color]="player.color" item-left></span>
+      <span class="player_color" (click)="openColorPickerPopover($event, player)" [style.background-color]="player.color" item-left></span>
       <ion-input type="text" placeholder="{{ getDefaultName(i+1) }}" [(ngModel)]="player.name" [disabled]="game.ended || (!game.id && player.id)"></ion-input>
       <ion-select interface="action-sheet" class="player_select" [hidden]="game.id || game.ended" [(ngModel)]="selectedPlayers[i]" (ionChange)="playerSelected(i)" cancelText="{{ 'cancel' | translate }}">
         <ion-option [value]="{}">{{ 'players.new_player' | translate }}</ion-option>
