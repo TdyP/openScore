@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { GameHistory } from '../history/history';
 import { GameChart } from '../chart/chart';
+import { GameNotes } from '../notes/notes';
 import { GameSettings } from '../../settings/settings';
 import { GamePlayers } from '../../players/players';
 import { GameService } from '../../../../providers/game/game.service';
@@ -42,6 +43,11 @@ export class LiveMenu {
         title: this.translateService.instant('live.chart'),
         icon: 'trending-up',
         page: GameChart
+      },
+      {
+        title: this.translateService.instant('live.notes'),
+        icon: 'create',
+        page: GameNotes
       }
     ];
 

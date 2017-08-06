@@ -67,7 +67,9 @@
         "winner_is": "The winner is",
         "winner_score": "{{ score }} points",
         "new_game": "New game",
-        "new_game_confirm": "Do you really want to start a new game?"
+        "new_game_confirm": "Do you really want to start a new game?",
+        "notes": "Notes",
+        "notes_placeholder": "Where did the game took place? Who cheated? Who forfeited?"
     },
     "player_view": {
         "games_played": "Games played : {{ count }}",

@@ -28,6 +28,7 @@ import { NewRoundModal } from '../pages/game/live/newRound/newRound';
 import { GameOverModal } from '../pages/game/live/gameOver/gameOver';
 import { GameChart } from '../pages/game/live/chart/chart';
 import { GameHistory } from '../pages/game/live/history/history';
+import { GameNotes } from '../pages/game/live/notes/notes';
 import { PlayersList } from '../pages/players/list/list';
 import { PlayersView } from '../pages/players/view/view';
 import { ColorPickerPopover } from '../pages/game/players/colorPickerPopover/colorPickerPopover';
@@ -57,6 +58,7 @@ export function localeServiceFactory(localeService: any) {
     GameOverModal,
     GameChart,
     GameHistory,
+    GameNotes,
     PlayersList,
     PlayersView,
     ColorPickerPopover,
@@ -91,6 +93,7 @@ export function localeServiceFactory(localeService: any) {
     GameOverModal,
     GameChart,
     GameHistory,
+    GameNotes,
     PlayersList,
     PlayersView,
     ColorPickerPopover

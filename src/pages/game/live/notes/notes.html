@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ 'live.notes' | translate }}
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button light full (click)="validate()">
+        {{ "validate" | translate }}
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-textarea
+    [(ngModel)]="game.notes"
+    placeholder="{{ 'live.notes_placeholder' | translate }}"
+    rows="10"></ion-textarea>
+</ion-content>

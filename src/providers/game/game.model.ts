@@ -19,6 +19,7 @@ export class GameModel {
   createdAt: Date;
   modifAt: Date;
   ended: boolean = false;
+  notes: string = '';
 
   constructor(data ?: any) {
 
@@ -37,6 +38,7 @@ export class GameModel {
       this.players_count = data.players_count || (data.players ? data.players.length : 0);
       this.rounds = data.rounds || [];
       this.ended = data.ended || false;
+      this.notes = data.notes || '';
     }
     else {
       this.start_date = Date.now();

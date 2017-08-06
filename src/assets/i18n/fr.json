@@ -67,7 +67,9 @@
         "winner_is": "Victoire de",
         "winner_score": "{{ score }} points",
         "new_game": "Nouvelle partie",
-        "new_game_confirm": "Êtes-vous sûr de vouloir commencer une nouvelle partie?"
+        "new_game_confirm": "Êtes-vous sûr de vouloir commencer une nouvelle partie?",
+        "notes": "Notes",
+        "notes_placeholder": "Où la partie a-t-elle eu lieu? Qui a triché? Qui a abandonné?"
     },
     "player_view": {
         "games_played": "Parties jouées : {{ count }}",

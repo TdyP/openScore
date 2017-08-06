@@ -37,6 +37,7 @@ export class GameService {
             g.rounds_played,
             g.favorite,
             g.ended,
+            g.notes,
             COUNT(p.player_id) AS players_count
           FROM games AS g
           LEFT JOIN participate AS p ON p.game_id = g.id
@@ -275,15 +276,16 @@ export class GameService {
         game.goal,
         game.goal_type,
         game.favorite ? 1 : 0,
-        game.rounds_played
+        game.rounds_played,
+        game.notes,
       ];
 
       if(game.id) {
-        query = 'UPDATE games set name = ?, start_date = ?, modif_date = ?, score_type = ?, score_input = ?, goal = ?, goal_type = ?, favorite = ?, rounds_played = ? WHERE id = ?';
+        query = 'UPDATE games set name = ?, start_date = ?, modif_date = ?, score_type = ?, score_input = ?, goal = ?, goal_type = ?, favorite = ?, rounds_played = ?, notes = ? WHERE id = ?';
         params.push(game.id);
       }
       else {
-        query = 'INSERT INTO games (name, start_date, modif_date, score_type, score_input, goal, goal_type, favorite, rounds_played) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        query = 'INSERT INTO games (name, start_date, modif_date, score_type, score_input, goal, goal_type, favorite, rounds_played, notes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       }
 
       this.db.query(query, params)

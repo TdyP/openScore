@@ -9,7 +9,7 @@ export class DbService {
 
   public db: SQLiteObject;
   private isReady: boolean = false;
-  private currentVersion: number = 3;
+  private currentVersion: number = 4;
 
   constructor(
     private sqlite: SQLite,
@@ -219,6 +219,20 @@ export class DbService {
       // add new column to games table
       this.db.executeSql('ALTER TABLE games ADD COLUMN ended INT(1) DEFAULT 0', [])
         .then(() => this.setDbVersion(3))
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+  /**
+   * Add field "notes" in games table
+   * @return {Promise<any>}
+   */
+  private upgrade_4(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // add new column to games table
+      this.db.executeSql('ALTER TABLE games ADD COLUMN notes TEXT', [])
+        .then(() => this.setDbVersion(4))
         .then(resolve)
         .catch(reject);
     });
