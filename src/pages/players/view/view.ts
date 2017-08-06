@@ -9,6 +9,7 @@ import { PlayerModel } from '../../../providers/player/player.model';
 import { SortByScorePipe } from '../../../pipes/sortByScore.pipe';
 
 @Component({
+  selector: 'page-player-view',
   templateUrl: 'view.html'
 })
 export class PlayersView {
@@ -26,6 +27,19 @@ export class PlayersView {
     private sortPipe: SortByScorePipe
   ) {
     this.player = this.navParams.get('player');
+    this.player.stats = {
+      games_played: 0,
+      games_ended: 0,
+      win_rate: 0,
+      awards: {
+        gold: {count: 0, rate: 0},
+        silver: {count: 0, rate: 0},
+        bronze: {count: 0, rate: 0},
+      },
+      fav_game: '',
+      fav_game_count: 0,
+      playing_time: ''
+    };
 
     this.loadPlayerStats()
       .then(() => {
@@ -47,32 +61,23 @@ export class PlayersView {
    */
   public loadPlayerStats(): Promise<any> {
     return new Promise((resolve, reject) => {
-      let stats = {
-        games_played: 0,
-        games_ended: 0,
-        wins: 0,
-        win_rate: 0,
-        fav_game: '',
-        fav_game_count: 0,
-        playing_time: ''
-      }
-
       let winsPerGame = {};
       let playingTimeSeconds = 0;
 
       this.gameService.getGamesByPlayer(this.player)
       .then(games => {
-        stats.games_played = games.length;
+        this.player.stats.games_played = games.length;
 
         return Promise.all(games.map(game => {
-          // For each game, we load all players and rounds to get the ranking and count wins
+          // For each game, we load all players and rounds to get the ranking
+          // and count first, second and third places
           return new Promise((resolve, reject) => {
             this.gameService.loadGameDetails(game) // Load players and rounds
             .then(game => {
 
               // Game ended: compute win stats
               if(game.isEnded()) {
-                stats.games_ended++;
+                this.player.stats.games_ended++;
                 this.gameService.updateRanking(game); // Add "rank" field on players
 
                 // Get players sorted by rank
@@ -80,13 +85,16 @@ export class PlayersView {
 
                 // Player has won this game. Count victories per game to find out "favorite game" (game with most wins)
                 if(ranking[0].id === this.player.id) {
-                  stats.wins++;
+                  this.player.stats.awards.gold.count++;
 
                   if(typeof winsPerGame[game.name] === 'undefined') {
                     winsPerGame[game.name] = 0;
                   }
-
                   winsPerGame[game.name]++;
+                } else if (ranking[1].id === this.player.id) {
+                  this.player.stats.awards.silver.count++;
+                } else if (ranking[2].id === this.player.id) {
+                  this.player.stats.awards.bronze.count++;
                 }
               }
 
@@ -103,13 +111,16 @@ export class PlayersView {
       })
       .then(games => {
         // Win rate
-        stats.win_rate = stats.games_ended ? Math.round((stats.wins / stats.games_ended) * 100) : 0;
+        this.player.stats.win_rate = this.player.stats.awards.gold.count;
+        this.player.stats.awards.gold.rate = this._getRoundedRate(this.player.stats.awards.gold.count);
+        this.player.stats.awards.silver.rate = this._getRoundedRate(this.player.stats.awards.silver.count);
+        this.player.stats.awards.bronze.rate = this._getRoundedRate(this.player.stats.awards.bronze.count);
 
         // Favorite game with number of wins on this game
         for(let key of Object.keys(winsPerGame)) {
-          if(winsPerGame[key] > stats.fav_game_count) {
-            stats.fav_game_count = winsPerGame[key];
-            stats.fav_game = key;
+          if(winsPerGame[key] > this.player.stats.fav_game_count) {
+            this.player.stats.fav_game_count = winsPerGame[key];
+            this.player.stats.fav_game = key;
           }
         }
 
@@ -118,9 +129,8 @@ export class PlayersView {
         playingTimeSeconds %= 3600;
         let minutes = Math.floor(playingTimeSeconds / 60);
         let seconds = Math.floor(playingTimeSeconds % 60);
-        stats.playing_time = `${hours}h${minutes}m${seconds}s`;
+        this.player.stats.playing_time = `${hours}h${minutes}m${seconds}s`;
 
-        this.player.stats = stats;
         resolve();
       })
       .catch(reject);
@@ -174,5 +184,9 @@ export class PlayersView {
       ]
     })
     .present();
+  }
+
+  private _getRoundedRate(gamesCount: number): number {
+    return Math.round((gamesCount / this.player.stats.games_ended) * 100);
   }
 }

@@ -23,17 +23,38 @@
       <ion-icon name="flag" item-left></ion-icon>
       <ion-label>{{ 'player_view.games_ended' | translate : {count: player.stats.games_ended} }}</ion-label>
     </ion-item>
-    <ion-item>
-      <ion-icon name="trophy" item-left></ion-icon>
-      <ion-label>{{ 'player_view.wins' | translate : {count: player.stats.wins, percent: player.stats.win_rate} }}</ion-label>
-    </ion-item>
-    <ion-item [hidden]="!player.stats.wins">
+    <ion-item [hidden]="!player.stats.first_place">
       <ion-icon name="heart" item-left></ion-icon>
       <ion-label>{{ 'player_view.favorite_game' | translate : {game_name: player.stats.fav_game, count: player.stats.fav_game_count} }}</ion-label>
     </ion-item>
     <ion-item>
       <ion-icon name="clock" item-left></ion-icon>
       <ion-label>{{ 'player_view.playing_time' | translate : {time: player.stats.playing_time} }}</ion-label>
+    </ion-item>
+    <ion-item-divider>
+      <ion-icon name="trophy" item-left></ion-icon>
+      <ion-label>{{ 'player_view.awards' | translate }}</ion-label>
+    </ion-item-divider>
+    <ion-item>
+      <ion-icon name="medal" class="medal gold" item-left></ion-icon>
+      <ion-label>
+       {{ player.stats.awards.gold.count }}
+       ({{ player.stats.awards.gold.rate }}%)
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="medal" class="medal silver" item-left></ion-icon>
+      <ion-label>
+       {{ player.stats.awards.silver.count }}
+       ({{ player.stats.awards.silver.rate }}%)
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="medal" class="medal bronze" item-left></ion-icon>
+      <ion-label>
+       {{ player.stats.awards.bronze.count }}
+       ({{ player.stats.awards.bronze.rate }}%)
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -131,9 +131,9 @@ page-game-live {
         margin: 0;
       }
 
-      &.rank_1 .medal { color: #FFD700 } // Gold medal
-      &.rank_2 .medal { color: #C0C0C0 } // Silver medal
-      &.rank_3 .medal { color: #cd7f32 } // Bronze medal
+      &.rank_1 .medal { color: $gold } // Gold medal
+      &.rank_2 .medal { color: $silver } // Silver medal
+      &.rank_3 .medal { color: $bronze } // Bronze medal
     }
   }
   ion-footer {

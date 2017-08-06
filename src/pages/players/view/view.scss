@@ -1,0 +1,7 @@
+page-player-view {
+  .medal {
+    &.gold { color: $gold; }
+    &.silver { color: $silver; }
+    &.bronze { color: $bronze; }
+  }
+}
